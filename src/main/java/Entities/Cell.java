@@ -10,6 +10,7 @@ public class Cell {
     private Water water;
     private Air air;
     private Soil soil;
+    private Robot robot;
 
     public Cell() {
         plant = null;
@@ -17,5 +18,6 @@ public class Cell {
         water = null;
         air = null;
         soil = null;
+        robot = null;
     }
 }
