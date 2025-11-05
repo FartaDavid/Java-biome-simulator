@@ -1,5 +1,6 @@
 package main;
 
+import Entities.CommandManager;
 import Entities.GameMap;
 import Entities.MapManager;
 import Entities.Robot;
@@ -38,13 +39,18 @@ public class Main {
 
         String dim = input.territoryDim;
         String[] part = dim.split("x");
+
         int n = Integer.parseInt(part[0]);
-        GameMap map = new GameMap(n);
+        int m = Integer.parseInt(part[1]);
+
+        GameMap map = new GameMap(n, m);
         MapManager mapManager = new MapManager();
+        Robot robot = new Robot();
+
+        robot.setEnergyPoint(input.energyPoints);
+        map.initializeRobot(robot);
         mapManager.setEntitites(input, map);
 
-        Robot robot = new Robot();
-        robot.setEnergyPoint(input.energyPoints);
 
         /*
          * TODO Implement your function here
@@ -63,6 +69,9 @@ public class Main {
          * output.add(objectNode);
          *
          */
+
+        CommandManager commandManager = new CommandManager(MAPPER);
+        commandManager.commandManage(commands, output, robot, map);
 
         File outputFile = new File(outputPath);
         outputFile.getParentFile().mkdirs();

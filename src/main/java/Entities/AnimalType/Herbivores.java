@@ -3,8 +3,8 @@ package Entities.AnimalType;
 import Entities.Animal;
 
 public class Herbivores extends Animal {
-    public Herbivores(String name, double mass, String status) {
-        super(name, mass, status);
+    public Herbivores(String name, double mass) {
+        super(name, mass);
     }
 
     public void drinkWater(double waterToDrink) {

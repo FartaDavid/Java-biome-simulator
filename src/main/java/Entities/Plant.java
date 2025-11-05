@@ -7,13 +7,13 @@ import lombok.Setter;
 
 @Getter @Setter
 public class Plant extends Entities {
-    CategoriePlanta categoriePlanta;
-    Maturity maturity;
+    private CategoriePlanta categoriePlanta;
+    private Maturity maturity;
+    private String type;
 
-    public Plant(String name, double mass, CategoriePlanta categoriePlanta, Maturity maturity) {
+    public Plant(String name, double mass, String type) {
         super(name, mass);
-        this.categoriePlanta = categoriePlanta;
-        this.maturity = maturity;
+        this.type = type;
     }
 
     public double genO2() {
