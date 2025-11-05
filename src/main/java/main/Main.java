@@ -1,6 +1,7 @@
 package main;
 
 import Entities.GameMap;
+import Entities.MapManager;
 import Entities.Robot;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -39,11 +40,11 @@ public class Main {
         String[] part = dim.split("x");
         int n = Integer.parseInt(part[0]);
         GameMap map = new GameMap(n);
+        MapManager mapManager = new MapManager();
+        mapManager.setEntitites(input, map);
 
         Robot robot = new Robot();
-
         robot.setEnergyPoint(input.energyPoints);
-        map.setAir(input.territorySectionParams.air);
 
         /*
          * TODO Implement your function here

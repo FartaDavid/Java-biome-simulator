@@ -20,7 +20,7 @@ public class GameMap {
         while(!air.isEmpty()) {
             AirInput input = air.getFirst();
             PairInput coord = input.sections.getFirst();
-            while(!coord.)
+            while()
         }
     }
 }
