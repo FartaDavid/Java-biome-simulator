@@ -8,13 +8,13 @@ public class Water extends Entities {
     private double salinity;
     private double pH;
     private double purity;
-    private int turbidity;
+    private double turbidity;
     private double contaminantIndex;
     private boolean isFrozen;
 
-    public Water(String name, double mass, double salinity, double pH, double purity, int turbidity,
+    public Water(String type, String name, double mass, double salinity, double pH, double purity, double turbidity,
                  double contaminantIndex, boolean isFrozen) {
-        super(name, mass);
+        super(type, name, mass);
         this.salinity = salinity;
         this.pH = pH;
         this.purity = purity;
@@ -27,7 +27,7 @@ public class Water extends Entities {
         double purity_score = purity / 100;
         double pH_score = 1 - Math.abs(pH - 7.5) / 7.5;
         double salinity_score = 1 - (salinity / 350);
-        double turbidity_score = 1 - (1.0 * turbidity / 100);
+        double turbidity_score = 1 - (turbidity / 100);
         double contaminant_score = 1 - (contaminantIndex / 100);
         double frozen_score = isFrozen ? 1 : 0;
 

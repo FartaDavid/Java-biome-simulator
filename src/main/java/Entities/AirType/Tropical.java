@@ -8,26 +8,15 @@ import lombok.Setter;
 public class Tropical extends Air {
     private double co2Level;
 
-    public Tropical(String name, double mass, double humidity, double temperature, double oxygenLevel) {
-        super(name, mass, humidity, temperature, oxygenLevel);
-    }
-
-    public String airQuality() {
-        double oxygenLevel = getOxygenLevel();
-        double humidity = getHumidity();
+    public Tropical(String type, String name, double mass, double humidity, double temperature, double oxygenLevel, double co2Level) {
+        super(type, name, mass, humidity, temperature, oxygenLevel);
+        this.co2Level = co2Level;
 
         double quality = oxygenLevel * 2 + humidity * 0.5 - co2Level * 0.01;
         quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
         quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
         super.setAirQuality(quality);
 
-        if (quality >= 70) {
-            return "Good";
-        }
-        if (quality < 70 && quality >= 40) {
-            return "Moderate";
-        }
-        return "Poor";
     }
 
     public double airToxicity() {

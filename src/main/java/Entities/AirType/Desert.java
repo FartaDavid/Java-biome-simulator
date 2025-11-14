@@ -8,26 +8,14 @@ import lombok.Setter;
 public class Desert extends Air {
     private double dustParticles;
 
-    public Desert(String name, double mass, double humidity, double temperature, double oxygenLevel) {
-        super(name, mass, humidity, temperature, oxygenLevel);
-    }
-
-    public String airQuality() {
-        double oxygenLevel = getOxygenLevel();
-        double temperature = getTemperature();
+    public Desert(String type, String name, double mass, double humidity, double temperature, double oxygenLevel, double dustParticles) {
+        super(type, name, mass, humidity, temperature, oxygenLevel);
+        this.dustParticles = dustParticles;
 
         double quality = oxygenLevel * 2 - dustParticles * 0.2 - temperature * 0.3;
         quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
         quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
         super.setAirQuality(quality);
-
-        if (quality >= 70) {
-            return "Good";
-        }
-        if (quality < 70 && quality >= 40) {
-            return "Moderate";
-        }
-        return "Poor";
     }
 
     public double airToxicity() {

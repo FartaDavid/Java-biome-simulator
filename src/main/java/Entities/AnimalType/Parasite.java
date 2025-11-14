@@ -3,8 +3,8 @@ package Entities.AnimalType;
 import Entities.Animal;
 
 public class Parasite extends Animal {
-    public Parasite(String name, double mass) {
-        super(name, mass);
+    public Parasite(String type, String name, double mass) {
+        super(type, name, mass);
     }
 
     public void eatAnimal(double preyMass) {

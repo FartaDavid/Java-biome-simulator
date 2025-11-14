@@ -9,13 +9,24 @@ public class Soil extends Entities {
     private double waterRetention;
     private double soilpH;
     private double organicMatter;
+    private double quality;
 
-    public Soil(String name, double mass, double nitrogen, double waterRetention,
+    public Soil(String type, String name, double mass, double nitrogen, double waterRetention,
                 double soilpH, double organicMatter) {
-        super(name, mass);
+        super(type, name, mass);
         this.nitrogen = nitrogen;
         this.waterRetention = waterRetention;
         this.soilpH = soilpH;
         this.organicMatter = organicMatter;
+    }
+
+    public String qualitySoil() {
+        if (quality >= 70) {
+            return "good";
+        }
+        if (quality < 70 && quality >= 40) {
+            return "moderate";
+        }
+        return "poor";
     }
 }

@@ -7,8 +7,8 @@ import lombok.Setter;
 public class Animal extends Entities {
     private String status;
 
-    public Animal(String name, double mass) {
-        super(name, mass);
+    public Animal(String type, String name, double mass) {
+        super(type, name, mass);
     }
 
     public double AttackProbability() {

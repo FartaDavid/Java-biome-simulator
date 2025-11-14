@@ -8,13 +8,9 @@ import lombok.Setter;
 public class Polar extends Air {
     private double iceCrystalConcentration;
 
-    public Polar(String name, double mass, double humidity, double temperature, double oxygenLevel) {
-        super(name, mass, humidity, temperature, oxygenLevel);
-    }
-
-    public String airQuality() {
-        double oxygenLevel = getOxygenLevel();
-        double temperature = getTemperature();
+    public Polar(String type, String name, double mass, double humidity, double temperature, double oxygenLevel, double iceCrystalConcentration) {
+        super(type, name, mass, humidity, temperature, oxygenLevel);
+        this.iceCrystalConcentration = iceCrystalConcentration;
 
         double quality = oxygenLevel * 2 + 100 - Math.abs(temperature) -
                 iceCrystalConcentration * 0.05;
@@ -22,13 +18,6 @@ public class Polar extends Air {
         quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
         super.setAirQuality(quality);
 
-        if (quality >= 70) {
-            return "Good";
-        }
-        if (quality < 70 && quality >= 40) {
-            return "Moderate";
-        }
-        return "Poor";
     }
 
     public double airToxicity() {

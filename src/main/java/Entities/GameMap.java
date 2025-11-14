@@ -1,5 +1,6 @@
 package Entities;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,8 @@ import lombok.Setter;
 @Getter @Setter
 public class GameMap {
     private Cell[][] cell;
+    private int x;
+    private int y;
 
     public Cell getCell(int x, int y) {
         return cell[x][y];
@@ -14,6 +17,8 @@ public class GameMap {
 
     public GameMap(int n, int m) {
         cell = new Cell[n][m];
+        this.x = n;
+        this.y = m;
 
         for(int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -23,8 +28,7 @@ public class GameMap {
     }
 
     public void setMapSoil(SoilInput soil) {
-        Soil realSoil = new Soil(soil.name, soil.mass, soil.nitrogen, soil.waterRetention,
-                        soil.soilpH, soil.organicMatter);
+        Soil realSoil = SoilSetter.returnSoil(soil);
 
         for(PairInput coordinates : soil.sections) {
             int x = coordinates.x;
@@ -34,7 +38,7 @@ public class GameMap {
     }
 
     public void setMapPlant(PlantInput plant) {
-        Plant realPlant = new Plant(plant.name, plant.mass, plant.type);
+        Plant realPlant = new Plant(plant.type, plant.name, plant.mass);
 
         for(PairInput coordinates : plant.sections) {
             int x = coordinates.x;
@@ -54,7 +58,7 @@ public class GameMap {
     }
 
     public void setMapWater(WaterInput water) {
-        Water realWater = new Water(water.name, water.mass, water.salinity, water.pH, water.purity,
+        Water realWater = new Water(water.type, water.name, water.mass, water.salinity, water.pH, water.purity,
                                     water.turbidity, water.contaminantIndex, water.isFrozen);
 
         for(PairInput coordinates : water.sections) {
@@ -77,5 +81,19 @@ public class GameMap {
         cell[0][0].setRobot(robot);
         robot.setX(0);
         robot.setY(0);
+    }
+
+    public int nrObj(int i, int j) {
+        int count = 0;
+        if (cell[i][j].getWater() != null) {
+            count++;
+        }
+        if (cell[i][j].getPlant() != null) {
+            count++;
+        }
+        if (cell[i][j].getAnimal() != null) {
+            count++;
+        }
+        return count;
     }
 }

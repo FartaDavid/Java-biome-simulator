@@ -3,8 +3,8 @@ package Entities.AnimalType;
 import Entities.Animal;
 
 public class Detritivores extends Animal {
-    public Detritivores(String name, double mass) {
-        super(name, mass);
+    public Detritivores(String type, String name, double mass) {
+        super(type, name, mass);
     }
 
     public void drinkWater(double waterToDrink) {

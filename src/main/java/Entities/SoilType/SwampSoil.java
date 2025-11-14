@@ -1,29 +1,25 @@
 package Entities.SoilType;
 
 import Entities.Soil;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class SwampSoil extends Soil {
-    public SwampSoil(String name, double mass, double nitrogen, double waterRetention,
-                      double soilpH, double organicMatter) {
-        super(name, mass, nitrogen, waterRetention, soilpH, organicMatter);
-    }
+    double waterLogging;
 
-    public String qualitySoil(double waterLogging) {
-        double nitrogen = getNitrogen();
-        double organicMatter = getOrganicMatter();
+    public SwampSoil(String type, String name, double mass, double nitrogen, double waterRetention,
+                      double soilpH, double organicMatter, double waterLogging) {
+        super(type, name, mass, nitrogen, waterRetention, soilpH, organicMatter);
+        this.waterLogging = waterLogging;
 
         double quality = nitrogen * 1.1 + organicMatter * 2.2 - waterLogging * 5;
         quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
 
         quality = (double) Math.round(quality * 100.0) / 100; // rotunjesc scorul
 
-        if (quality >= 70) {
-            return "Good";
-        }
-        if (quality < 70 && quality >= 40) {
-            return "Moderate";
-        }
-        return "Poor";
+        super.setQuality(quality);
+
     }
 
     public double blockProbability(double waterLogging) {

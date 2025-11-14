@@ -8,26 +8,15 @@ import lombok.Setter;
 public class Temperat extends Air {
     private double pollenLevel;
 
-    public Temperat(String name, double mass, double humidity, double temperature, double oxygenLevel) {
-        super(name, mass, humidity, temperature, oxygenLevel);
-    }
-
-    public String airQuality() {
-        double oxygenLevel = getOxygenLevel();
-        double humidity = getHumidity();
+    public Temperat(String type, String name, double mass, double humidity, double temperature, double oxygenLevel, double pollenLevel) {
+        super(type, name, mass, humidity, temperature, oxygenLevel);
+        this.pollenLevel = pollenLevel;
 
         double quality = oxygenLevel * 2 + humidity * 0.7 - pollenLevel * 0.1;
         quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
         quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
         super.setAirQuality(quality);
 
-        if (quality >= 70) {
-            return "Good";
-        }
-        if (quality < 70 && quality >= 40) {
-            return "Moderate";
-        }
-        return "Poor";
     }
 
     public double airToxicity() {

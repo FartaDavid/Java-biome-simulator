@@ -9,11 +9,8 @@ import lombok.Setter;
 public class Plant extends Entities {
     private CategoriePlanta categoriePlanta;
     private Maturity maturity;
-    private String type;
-
-    public Plant(String name, double mass, String type) {
-        super(name, mass);
-        this.type = type;
+    public Plant(String type, String name, double mass) {
+        super(type, name, mass);
     }
 
     public double genO2() {

@@ -7,10 +7,12 @@ import lombok.Setter;
 public class Entities {
     private double mass;
     private String name;
+    private String type;
 
-    public Entities(String name, double mass) {
+    public Entities(String type, String name, double mass) {
         this.name = name;
         this.mass = mass;
+        this.type = type;
     }
 }
 
