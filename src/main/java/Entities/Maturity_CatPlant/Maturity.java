@@ -13,4 +13,8 @@ public enum Maturity {
     public double getMaturity() {
         return this.o2_bonus;
     }
+
+    public static Maturity getMaturityByType(String type) {
+        return Maturity.valueOf(type);
+    }
 }

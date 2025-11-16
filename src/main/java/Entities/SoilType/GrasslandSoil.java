@@ -20,11 +20,9 @@ public class GrasslandSoil extends Soil {
 
         super.setQuality(quality);
 
-    }
+        double blockProb = ((50.0 - rootDensity) + waterRetention * 0.5) / 75.0 * 100.0;
 
-    public double blockProbability(double rootDensity) {
-        double waterRetention = getWaterRetention();
+        super.setBlockProbability(blockProb);
 
-        return ((50 - rootDensity) + waterRetention * 0.5) / 75 * 100;
     }
 }

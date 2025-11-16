@@ -20,9 +20,6 @@ public class TundraSoil extends Soil {
 
         super.setQuality(quality);
 
-    }
-
-    public double blockProbability(double permafrostDepth) {
-        return (50 - permafrostDepth) / 50 * 100;
+        super.setBlockProbability((50.0 - permafrostDepth) / 50.0 * 100.0);
     }
 }

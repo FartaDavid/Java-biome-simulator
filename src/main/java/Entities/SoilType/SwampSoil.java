@@ -20,9 +20,7 @@ public class SwampSoil extends Soil {
 
         super.setQuality(quality);
 
-    }
+        super.setBlockProbability(waterLogging * 10.0);
 
-    public double blockProbability(double waterLogging) {
-        return waterLogging * 10;
     }
 }

@@ -1,6 +1,5 @@
 package Entities;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,7 @@ public class GameMap {
 
         for(int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                cell[i][j] = new Cell();
+                cell[i][j] = new Cell(i, j);
             }
         }
     }

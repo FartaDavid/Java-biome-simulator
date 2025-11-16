@@ -18,16 +18,12 @@ public class Polar extends Air {
         quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
         super.setAirQuality(quality);
 
-    }
-
-    public double airToxicity() {
-        double quality = super.getAirQuality();
-        double toxicityAQ = 100 * (1 - quality / 142);
+        double toxicityAQ = 100.0 * (1.0 - quality / 142.0);
         toxicityAQ = Math.round(toxicityAQ * 100.0) / 100.0; // final result toxicity
         toxicityAQ = Math.max(0, Math.min(100, toxicityAQ)); // normalizez scorul
         toxicityAQ = Math.round(toxicityAQ * 100.0) / 100.0; // rotunjesc scorul
 
-        return toxicityAQ;
+        super.setToxicity(toxicityAQ);
     }
 
     public double polarStorm(double windSpeed) {

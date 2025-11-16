@@ -20,11 +20,9 @@ public class ForestSoil extends Soil {
         quality = (double) Math.round(quality * 100.0) / 100; // rotunjesc scorul
 
         super.setQuality(quality);
-    }
 
-    public double blockProbability(double leaflitter) {
-        double waterRetention = getWaterRetention();
+        double blockProb = (waterRetention * 0.6 + leaflitter * 0.4) / 80.0 * 100.0;
 
-        return (waterRetention * 0.6 + leaflitter * 0.4) / 80 * 100;
+        super.setBlockProbability(blockProb);
     }
 }

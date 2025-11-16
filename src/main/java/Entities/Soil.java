@@ -10,6 +10,7 @@ public class Soil extends Entities {
     private double soilpH;
     private double organicMatter;
     private double quality;
+    private double blockProbability;
 
     public Soil(String type, String name, double mass, double nitrogen, double waterRetention,
                 double soilpH, double organicMatter) {

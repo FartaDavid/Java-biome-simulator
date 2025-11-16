@@ -9,6 +9,7 @@ public class Air extends Entities {
     private double temperature;
     private double oxygenLevel;
     private double airQuality;
+    private double toxicity;
 
     public Air(String type, String name, double mass, double humidity, double temperature, double oxygenLevel) {
         super(type, name, mass);

@@ -20,11 +20,8 @@ public class DesertSoil extends Soil {
 
         super.setQuality(quality);
 
-    }
+        double blockProb = (100.0 - waterRetention + salinity) / 100.0 * 100.0;
 
-    public double blockProbability(double salinity) {
-        double waterRetention = getWaterRetention();
-
-        return (100 - waterRetention + salinity) / 100 * 100;
+        super.setBlockProbability(blockProb);
     }
 }

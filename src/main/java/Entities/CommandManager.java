@@ -18,6 +18,9 @@ public class CommandManager {
     }
 
     public void commandManage(ArrayList<CommandInput> commandInput, ArrayNode output, Robot robot, GameMap map) {
+
+        boolean simStarted = false;
+
         for(CommandInput command : commandInput) {
             ObjectNode commandOutput = MAPPER.createObjectNode();
 
@@ -26,16 +29,30 @@ public class CommandManager {
             switch(command.command) {
                 case "startSimulation":
                     commandOutput.put("message", "Simulation has started.");
+                    simStarted = true;
                     break;
                 case "endSimulation":
                     commandOutput.put("message", "Simulation has ended.");
+                    simStarted = false;
                     break;
                 case "printEnvConditions":
-                    this.PrintEnvCond(commandOutput, robot, map);
+                    if (simStarted)
+                        this.PrintEnvCond(commandOutput, robot, map);
+                    else
+                        commandOutput.put("message","ERROR: Simulation not started. Cannot perform action");
                     break;
                 case "printMap":
-                    this.PrintMap(commandOutput, map);
+                    if (simStarted)
+                        this.PrintMap(commandOutput, map);
+                    else
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
                     break;
+                case "moveRobot":
+                    if (simStarted) {
+                        robot.moveRobot(map, commandOutput);
+                    }
+                    else
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
             }
             commandOutput.put("timestamp", command.timestamp);
             output.add(commandOutput);
