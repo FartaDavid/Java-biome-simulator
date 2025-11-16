@@ -20,6 +20,7 @@ public class CommandManager {
     public void commandManage(ArrayList<CommandInput> commandInput, ArrayNode output, Robot robot, GameMap map) {
 
         boolean simStarted = false;
+        int charging = 0;
 
         for(CommandInput command : commandInput) {
             ObjectNode commandOutput = MAPPER.createObjectNode();
@@ -27,32 +28,70 @@ public class CommandManager {
             commandOutput.put("command", command.command);
 
             switch(command.command) {
+
                 case "startSimulation":
                     commandOutput.put("message", "Simulation has started.");
                     simStarted = true;
                     break;
+
                 case "endSimulation":
                     commandOutput.put("message", "Simulation has ended.");
                     simStarted = false;
                     break;
+
                 case "printEnvConditions":
-                    if (simStarted)
+                    if (charging > command.timestamp) {
+                    commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                    charging--;
+                    } else if (simStarted) {
                         this.PrintEnvCond(commandOutput, robot, map);
-                    else
+                    } else
                         commandOutput.put("message","ERROR: Simulation not started. Cannot perform action");
                     break;
+
                 case "printMap":
-                    if (simStarted)
+                    if (charging > command.timestamp) {
+                    commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                    charging--;
+                    } else if (simStarted) {
                         this.PrintMap(commandOutput, map);
-                    else
+                    } else
                         commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
                     break;
+
                 case "moveRobot":
-                    if (simStarted) {
+                    if (charging > command.timestamp) {
+                    commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                    charging--;
+                    } else if (simStarted) {
                         robot.moveRobot(map, commandOutput);
-                    }
-                    else
+                    } else
                         commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    break;
+
+                case "getEnergyStatus":
+                    if (charging > command.timestamp) {
+                    commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                    charging--;
+                    } else if (simStarted) {
+                        commandOutput.put("message", "TerraBot has " + robot.getEnergyPoint() + " energy points left.");
+                    } else {
+                        commandOutput.put("message","ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
+
+                case "rechargeBattery":
+                    if (charging > command.timestamp) {
+                        commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                        charging--;
+                    } else if (simStarted) {
+                        robot.resetEnergyPoint(command.timeToCharge);
+                        charging = command.timeToCharge + command.timestamp;
+                        commandOutput.put("message", "Robot battery is charging.");
+                    } else {
+                        commandOutput.put("message","ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
             }
             commandOutput.put("timestamp", command.timestamp);
             output.add(commandOutput);

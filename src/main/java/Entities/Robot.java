@@ -1,14 +1,24 @@
 package Entities;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import fileio.CommandInput;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
 public class Robot {
     private int energyPoint;
+    private int initialenergyPoints;
     private int x;
     private int y;
+    public void setEnergyPoint(int energyPoint) {
+        this.energyPoint = energyPoint;
+        this.initialenergyPoints = energyPoint;
+    }
+
+    public void resetEnergyPoint(int timeToCharge) {
+        energyPoint += timeToCharge;
+    }
 
     public void moveRobot(GameMap map, ObjectNode commandOutput) {
         Cell[] cells = new Cell[4];
