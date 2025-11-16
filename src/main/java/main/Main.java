@@ -41,7 +41,7 @@ public final class Main {
         SimulationInput input = inputLoader.getSimulations().getFirst();
         ArrayList<CommandInput> commands = inputLoader.getCommands();
 
-        String dim = input.territoryDim;
+        String dim = input.getTerritoryDim();
         String[] part = dim.split("x");
 
         int n = Integer.parseInt(part[0]);
@@ -51,7 +51,7 @@ public final class Main {
         MapManager mapManager = new MapManager();
         Robot robot = new Robot();
 
-        robot.setEnergyPoint(input.energyPoints);
+        robot.setEnergyPoint(input.getEnergyPoints());
         map.initializeRobot(robot);
         mapManager.setEntitites(input, map);
 

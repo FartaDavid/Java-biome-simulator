@@ -25,9 +25,9 @@ public class CommandManager {
         for(CommandInput command : commandInput) {
             ObjectNode commandOutput = MAPPER.createObjectNode();
 
-            commandOutput.put("command", command.command);
+            commandOutput.put("command", command.getCommand());
 
-            switch(command.command) {
+            switch(command.getCommand()) {
 
                 case "startSimulation":
                     commandOutput.put("message", "Simulation has started.");
@@ -40,7 +40,7 @@ public class CommandManager {
                     break;
 
                 case "printEnvConditions":
-                    if (charging > command.timestamp) {
+                    if (charging > command.getTimestamp()) {
                     commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
                     charging--;
                     } else if (simStarted) {
@@ -50,7 +50,7 @@ public class CommandManager {
                     break;
 
                 case "printMap":
-                    if (charging > command.timestamp) {
+                    if (charging > command.getTimestamp()) {
                     commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
                     charging--;
                     } else if (simStarted) {
@@ -60,7 +60,7 @@ public class CommandManager {
                     break;
 
                 case "moveRobot":
-                    if (charging > command.timestamp) {
+                    if (charging > command.getTimestamp()) {
                     commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
                     charging--;
                     } else if (simStarted) {
@@ -70,7 +70,7 @@ public class CommandManager {
                     break;
 
                 case "getEnergyStatus":
-                    if (charging > command.timestamp) {
+                    if (charging > command.getTimestamp()) {
                     commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
                     charging--;
                     } else if (simStarted) {
@@ -81,19 +81,19 @@ public class CommandManager {
                     break;
 
                 case "rechargeBattery":
-                    if (charging > command.timestamp) {
+                    if (charging > command.getTimestamp()) {
                         commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
                         charging--;
                     } else if (simStarted) {
-                        robot.resetEnergyPoint(command.timeToCharge);
-                        charging = command.timeToCharge + command.timestamp;
+                        robot.resetEnergyPoint(command.getTimeToCharge());
+                        charging = command.getTimeToCharge() + command.getTimestamp();
                         commandOutput.put("message", "Robot battery is charging.");
                     } else {
                         commandOutput.put("message","ERROR: Simulation not started. Cannot perform action");
                     }
                     break;
             }
-            commandOutput.put("timestamp", command.timestamp);
+            commandOutput.put("timestamp", command.getTimestamp());
             output.add(commandOutput);
         }
     }
@@ -170,12 +170,6 @@ public class CommandManager {
             waterNode.put("type", water.getType());
             waterNode.put("name", water.getName());
             waterNode.put("mass", water.getMass());
-            waterNode.put("purity", water.getPurity()); // Asigură-te că acestea sunt String
-            waterNode.put("salinity", water.getSalinity()); // Asigură-te că acestea sunt String
-            waterNode.put("turbidity", water.getTurbidity());
-            waterNode.put("contaminantIndex", water.getContaminantIndex());
-            waterNode.put("pH", water.getPH());
-            waterNode.put("isFrozen", water.isFrozen());
             output.set("water", waterNode);
         }
 

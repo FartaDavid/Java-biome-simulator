@@ -6,31 +6,31 @@ import fileio.AirInput;
 public class AirSetter {
     public static Air returnAir(AirInput airInput) {
 
-        switch(airInput.type) {
+        switch(airInput.getType()) {
             case "TropicalAir":
-                return new Tropical(airInput.type, airInput.name, airInput.mass,
-                        airInput.humidity, airInput.temperature,
-                        airInput.oxygenLevel, airInput.co2Level); // Presupunând că ai adăugat co2Level în AirInput
+                return new Tropical(airInput.getType(), airInput.getName(), airInput.getMass(),
+                        airInput.getHumidity(), airInput.getTemperature(),
+                        airInput.getOxygenLevel(), airInput.getCo2Level()); // Presupunând că ai adăugat co2Level în AirInput
 
             case "TemperateAir": // Sau "Temperat"
-                return new Temperat(airInput.type, airInput.name, airInput.mass,
-                        airInput.humidity, airInput.temperature,
-                        airInput.oxygenLevel, airInput.pollenLevel); // La fel
+                return new Temperat(airInput.getType(), airInput.getName(), airInput.getMass(),
+                        airInput.getHumidity(), airInput.getTemperature(),
+                        airInput.getOxygenLevel(), airInput.getPollenLevel()); // La fel
 
             case "MountainAir":
-                return new Montan(airInput.type, airInput.name, airInput.mass,
-                        airInput.humidity, airInput.temperature,
-                        airInput.oxygenLevel, airInput.altitude); // La fel
+                return new Montan(airInput.getType(), airInput.getName(), airInput.getMass(),
+                        airInput.getHumidity(), airInput.getTemperature(),
+                        airInput.getOxygenLevel(), airInput.getAltitude()); // La fel
 
             case "DesertAir":
-                return new Desert(airInput.type, airInput.name, airInput.mass,
-                        airInput.humidity, airInput.temperature,
-                        airInput.oxygenLevel, airInput.dustParticles); // La fel
+                return new Desert(airInput.getType(), airInput.getName(), airInput.getMass(),
+                        airInput.getHumidity(), airInput.getTemperature(),
+                        airInput.getOxygenLevel(), airInput.getDustParticles()); // La fel
 
             case "PolarAir":
-                return new Polar(airInput.type, airInput.name, airInput.mass,
-                        airInput.humidity, airInput.temperature,
-                        airInput.oxygenLevel, airInput.iceCrystalConcentration); // La fel
+                return new Polar(airInput.getType(), airInput.getName(), airInput.getMass(),
+                        airInput.getHumidity(), airInput.getTemperature(),
+                        airInput.getOxygenLevel(), airInput.getIceCrystalConcentration()); // La fel
 
             default:
                 return null;

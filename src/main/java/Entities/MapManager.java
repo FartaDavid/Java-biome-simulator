@@ -8,11 +8,11 @@ public class MapManager {
 
     public void setEntitites(SimulationInput input, GameMap map) {
         // iau entitatile din input
-        List<SoilInput> soils = input.territorySectionParams.soil;
-        List<PlantInput> plants = input.territorySectionParams.plants;
-        List<AnimalInput> animals = input.territorySectionParams.animals;
-        List<WaterInput> water = input.territorySectionParams.water;
-        List<AirInput> air = input.territorySectionParams.air;
+        List<SoilInput> soils = input.getTerritorySectionParams().getSoil();
+        List<PlantInput> plants = input.getTerritorySectionParams().getPlants();
+        List<AnimalInput> animals = input.getTerritorySectionParams().getAnimals();
+        List<WaterInput> water = input.getTerritorySectionParams().getWater();
+        List<AirInput> air = input.getTerritorySectionParams().getAir();
 
         // le pun pe harta pe fiecare
         for(SoilInput soil : soils) {

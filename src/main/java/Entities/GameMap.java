@@ -29,19 +29,19 @@ public class GameMap {
     public void setMapSoil(SoilInput soil) {
         Soil realSoil = SoilSetter.returnSoil(soil);
 
-        for(PairInput coordinates : soil.sections) {
-            int x = coordinates.x;
-            int y = coordinates.y;
+        for(PairInput coordinates : soil.getSections()) {
+            int x = coordinates.getX();
+            int y = coordinates.getY();
             cell[x][y].setSoil(realSoil);
         }
     }
 
     public void setMapPlant(PlantInput plant) {
-        Plant realPlant = new Plant(plant.type, plant.name, plant.mass);
+        Plant realPlant = new Plant(plant.getType(), plant.getName(), plant.getMass());
 
-        for(PairInput coordinates : plant.sections) {
-            int x = coordinates.x;
-            int y = coordinates.y;
+        for(PairInput coordinates : plant.getSections()) {
+            int x = coordinates.getX();
+            int y = coordinates.getY();
             cell[x][y].setPlant(realPlant);
         }
     }
@@ -49,9 +49,9 @@ public class GameMap {
     public void setMapAnimal(AnimalInput animal) {
         Animal realAnimal = AnimalSetter.returnAnimal(animal);
 
-        for(PairInput coordinates : animal.sections) {
-            int x = coordinates.x;
-            int y = coordinates.y;
+        for(PairInput coordinates : animal.getSections()) {
+            int x = coordinates.getX();
+            int y = coordinates.getY();
             cell[x][y].setAnimal(realAnimal);
         }
     }
@@ -61,17 +61,17 @@ public class GameMap {
                                     water.turbidity, water.contaminantIndex, water.isFrozen);
 
         for(PairInput coordinates : water.sections) {
-            int x = coordinates.x;
-            int y = coordinates.y;
+            int x = coordinates.getX();
+            int y = coordinates.getY();
             cell[x][y].setWater(realWater);
         }
     }
 
     public void setMapAir(AirInput air) {
         Air realAir = AirSetter.returnAir(air);
-        for(PairInput coordinates : air.sections) {
-            int x = coordinates.x;
-            int y = coordinates.y;
+        for(PairInput coordinates : air.getSections()) {
+            int x = coordinates.getX();
+            int y = coordinates.getY();
             cell[x][y].setAir(realAir);
         }
     }
