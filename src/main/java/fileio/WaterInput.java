@@ -8,7 +8,7 @@ public class WaterInput {
     public double mass;
     public double purity;
     public double salinity;
-    public double turbidity;
+    public int turbidity;
     public double contaminantIndex;
     public double pH;
     public boolean isFrozen;
