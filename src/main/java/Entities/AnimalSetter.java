@@ -18,7 +18,7 @@ public class AnimalSetter {
             case "Omnivores":
                 Omnivores omnivores = new Omnivores(animal.getType(), animal.getName(), animal.getMass());
                 return omnivores;
-            case "Parasite":
+            case "Parasites":
                 Parasite parasite = new Parasite(animal.getType(), animal.getName(), animal.getMass());
                 return parasite;
             default:

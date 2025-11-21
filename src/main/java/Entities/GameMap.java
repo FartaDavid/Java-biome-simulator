@@ -200,7 +200,6 @@ public class GameMap {
 
                 if (plant != null) {
                     if (plant.isScanned()) {
-                        System.out.println(plant.getMaturity());
                         if (animal != null) {
                             if (animal.isScanned()) {
                                 String toxicity = air.airQuality();

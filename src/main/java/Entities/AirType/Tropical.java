@@ -14,7 +14,7 @@ public class Tropical extends Air {
 
     public Tropical(String type, String name, double mass, double humidity, double temperature, double oxygenLevel, double co2Level) {
         super(type, name, mass, humidity, temperature, oxygenLevel);
-        this.co2Level = co2Level;
+        this.co2Level = super.roundTwoDecimals(co2Level);
 
         normalizeQuality(calculateAirQuality());
 

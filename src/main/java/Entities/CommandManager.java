@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.CommandInput;
+import fileio.InputLoader;
+import fileio.SimulationInput;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,22 +19,26 @@ public class CommandManager {
         this.MAPPER = MAPPER;
     }
 
-    public void commandManage(ArrayList<CommandInput> commandInput, ArrayNode output, Robot robot, GameMap map) {
+    public void commandManage(ArrayList<CommandInput> commandInput, ArrayNode output, InputLoader inputLoader) {
 
         ArrayList<Facts> facts = new ArrayList<>();
         boolean simStarted = false;
         int charging = 0;
         int changeweather = 0;
         int lastTimestamp = 0;
+        GameMap map = null;
+        Robot robot = null;
 
         for(CommandInput command : commandInput) {
             ObjectNode commandOutput = MAPPER.createObjectNode();
 
             int currentTimestamp = command.getTimestamp();
 
-            for (int i = lastTimestamp + 1; i <= currentTimestamp; i++) {
-                map.VerifyWeather(i); // verifica daca vreun changeweather se schimba
-                map.verifyScannedObj();
+            if (simStarted) {
+                for (int i = lastTimestamp + 1; i <= currentTimestamp; i++) {
+                    map.VerifyWeather(i); // verifica daca vreun changeweather se schimba
+                    map.verifyScannedObj();
+                }
             }
 
             lastTimestamp = currentTimestamp;
@@ -42,13 +48,41 @@ public class CommandManager {
             switch(command.getCommand()) {
 
                 case "startSimulation":
-                    commandOutput.put("message", "Simulation has started.");
-                    simStarted = true;
+
+                    if (!simStarted) {
+                        SimulationInput input = inputLoader.getSimulations().getFirst();
+
+                        String dim = input.getTerritoryDim();
+                        String[] part = dim.split("x");
+
+                        int n = Integer.parseInt(part[0]);
+                        int m = Integer.parseInt(part[1]);
+
+                        map = new GameMap(n, m);
+                        MapManager mapManager = new MapManager();
+                        robot = new Robot();
+
+                        robot.setEnergyPoint(input.getEnergyPoints());
+                        map.initializeRobot(robot);
+                        mapManager.setEntitites(input, map);
+                        commandOutput.put("message", "Simulation has started.");
+
+                        simStarted = true;
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation already started. Cannot perform action");
+                    }
                     break;
 
                 case "endSimulation":
-                    commandOutput.put("message", "Simulation has ended.");
-                    simStarted = false;
+                    if (simStarted) {
+                        commandOutput.put("message", "Simulation has ended.");
+                        simStarted = false;
+                        inputLoader.getSimulations().removeFirst();
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    }
                     break;
 
                 case "printEnvConditions":
@@ -124,7 +158,7 @@ public class CommandManager {
                             charging--;
                         }
                         else if (robot.getEnergyPoint() < 7) {
-                            commandOutput.put("message", "ERROR: Not enough battery left. Cannot perform action");
+                            commandOutput.put("message", "ERROR: Not enough energy to perform action");
                         }
                         else {
                             boolean ok = robot.scanObject(command, commandOutput, map, robot.getX(), robot.getY());
@@ -409,7 +443,7 @@ public class CommandManager {
             }
             if (improvement.equals("fertilize")) {
                 soil.setOrganicMatter(soil.getOrganicMatter() + 0.3);
-                commandOutput.put("message", "The " + soil.getName() + " was successfully fertilized using " + component);
+                commandOutput.put("message", "The soil was successfully fertilized using " + component);
             }
             if (improvement.equals("increaseHumidity")) {
                 if (air != null) {

@@ -38,25 +38,10 @@ public final class Main {
 
         ArrayNode output = MAPPER.createArrayNode();
 
-        SimulationInput input = inputLoader.getSimulations().getFirst();
         ArrayList<CommandInput> commands = inputLoader.getCommands();
 
-        String dim = input.getTerritoryDim();
-        String[] part = dim.split("x");
-
-        int n = Integer.parseInt(part[0]);
-        int m = Integer.parseInt(part[1]);
-
-        GameMap map = new GameMap(n, m);
-        MapManager mapManager = new MapManager();
-        Robot robot = new Robot();
-
-        robot.setEnergyPoint(input.getEnergyPoints());
-        map.initializeRobot(robot);
-        mapManager.setEntitites(input, map);
-
         CommandManager commandManager = new CommandManager(MAPPER);
-        commandManager.commandManage(commands, output, robot, map);
+        commandManager.commandManage(commands, output, inputLoader);
 
         /*
          * TODO Implement your function here
