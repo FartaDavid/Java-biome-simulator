@@ -7,18 +7,6 @@ public class Omnivores extends Animal {
         super(type, name, mass);
     }
 
-    public void drinkWater(double waterToDrink) {
-        double animalMass = getMass();
-        animalMass += waterToDrink;
-        setMass(animalMass);
-    }
-
-    public void eatPlant(double plantMass) {
-        double animalMass = getMass();
-        animalMass += plantMass;
-        setMass(animalMass);
-    }
-
     @Override
     public double AttackProbability() {
         return 4.0;

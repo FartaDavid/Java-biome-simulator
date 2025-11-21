@@ -13,7 +13,7 @@ public class GrasslandSoil extends Soil {
         super(type, name, mass, nitrogen, waterRetention, soilpH, organicMatter);
         this.rootDensity = rootDensity;
 
-        double quality = nitrogen * 1.2 + organicMatter * 2 + rootDensity * 0.8;
+        double quality = nitrogen * 1.3 + organicMatter * 1.5 + rootDensity * 0.8;
         quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
 
         quality = (double) Math.round(quality * 100.0) / 100; // rotunjesc scorul

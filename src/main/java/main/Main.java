@@ -55,6 +55,8 @@ public final class Main {
         map.initializeRobot(robot);
         mapManager.setEntitites(input, map);
 
+        CommandManager commandManager = new CommandManager(MAPPER);
+        commandManager.commandManage(commands, output, robot, map);
 
         /*
          * TODO Implement your function here
@@ -74,8 +76,6 @@ public final class Main {
          *
          */
 
-        CommandManager commandManager = new CommandManager(MAPPER);
-        commandManager.commandManage(commands, output, robot, map);
 
         File outputFile = new File(outputPath);
         outputFile.getParentFile().mkdirs();

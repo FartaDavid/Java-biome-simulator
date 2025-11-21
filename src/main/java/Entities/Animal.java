@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class Animal extends Entities {
-    private String status;
+    private String status = "hungry";
+    private int timer = 2;
 
     public Animal(String type, String name, double mass) {
         super(type, name, mass);
@@ -15,47 +16,107 @@ public class Animal extends Entities {
         return 0;
     }
 
-    public void WaterAndPlant(Water water, Plant plant, Soil soil) {
-        double waterMass = water.getMass();
-        double plantMass = plant.getMass();
+    public Cell move(GameMap map, int x, int y, boolean predator) {
+        Cell[] cells = new Cell[4];
+        int n = map.getX();
+        int m = map.getY();
 
-        double waterToDrink = Math.min(super.getMass() * 0.008, waterMass);
-        waterMass -= waterToDrink;
-        water.setMass(waterMass);
+        if (y + 1 < m) {
+            cells[0] = map.getCell(x, y + 1);
+        }
+        if (x + 1 < n) {
+            cells[1] = map.getCell(x + 1, y);
+        }
+        if (y - 1 >= 0) {
+            cells[2] = map.getCell(x, y - 1);
+        }
+        if (x - 1 >= 0) {
+            cells[3] = map.getCell(x - 1, y);
+        }
 
-        double mass = super.getMass();
-        mass += waterToDrink + plantMass;
-        super.setMass(mass);
+        Cell bestcell = null;
+        double waterQlt = 0;
 
-        double organicMatter = soil.getOrganicMatter();
-        organicMatter += 0.8;
-        soil.setOrganicMatter(organicMatter);
+        for (int i = 0; i < 4; i++) {
+            if (cells[i] != null) {
+                if (!predator && cells[i].getAnimal() != null)
+                    continue;
+                if (cells[i].getPlant() != null && cells[i].getWater() != null) {
+                    waterQlt = cells[i].getWater().calcQuality();
+                    bestcell = cells[i];
+                }
+            }
+        }
+        if (bestcell != null)
+            return bestcell;
+
+        for (int i = 0; i < 4; i++) {
+            if (cells[i] != null) {
+                if (!predator && cells[i].getAnimal() != null) {
+                    if (cells[i].getPlant() != null) {
+                        bestcell = cells[i];
+                    }
+                }
+            }
+        }
+        if (bestcell != null) return bestcell;
+        for (int i = 0; i < 4; i++) {
+            if (cells[i] != null) {
+                if (!predator && cells[i].getAnimal() != null) {
+                    if (cells[i].getWater() != null) {
+                        if (cells[i].getWater().getQuality() > waterQlt) {
+                            bestcell = cells[i];
+                            waterQlt = cells[i].getWater().getQuality();
+                        }
+                    }
+                }
+            }
+        }
+        if (bestcell != null) return bestcell;
+
+        if (bestcell == null) {
+            for (int i = 0; i < 4; i++) {
+                if (cells[i] != null)
+                    if (!predator && cells[i].getAnimal() != null)
+                        continue;
+                    return cells[i];
+            }
+        }
+        return bestcell;
     }
 
-    public void PlantFirst(Plant plant, Soil soil) {
-        double plantMass = plant.getMass();
+    public void eatAnimal(Animal prey) {
         double mass = super.getMass();
-        mass += plantMass;
+        mass += prey.getMass();
         super.setMass(mass);
-
-        double organicMatter = soil.getOrganicMatter();
-        organicMatter += 0.5;
-        soil.setOrganicMatter(organicMatter);
     }
 
-    public void WaterFirst(Water water, Soil soil) {
-        double mass = super.getMass();
-        double waterMass = water.getMass();
-        double waterToDrink = Math.min(mass * 0.08, waterMass);
+    public void drinkWater(Water water) {
+        if (!status.equals("sick")) {
+            double mass = super.getMass();
+            double waterMass = water.getMass();
+            double waterToDrink = Math.min(mass * 0.08, waterMass);
 
-        waterMass -= waterToDrink;
-        water.setMass(waterMass);
+            waterMass -= waterToDrink;
+            water.setMass(waterMass);
 
-        mass += waterToDrink;
-        super.setMass(mass);
+            mass += waterToDrink;
+            super.setMass(mass);
+            status = "well-fed";
+        }
+    }
 
-        double soilOrganicMatter = soil.getOrganicMatter();
-        soilOrganicMatter += 0.5;
-        soil.setOrganicMatter(soilOrganicMatter);
+    public Plant eatPlant(Plant plant) {
+        if (!status.equals("sick")) {
+            double plantMass = plant.getMass();
+            double mass = super.getMass();
+
+            mass += plantMass;
+            super.setMass(mass);
+
+            plant = null;
+            status = "well-fed";
+        }
+        return plant;
     }
 }

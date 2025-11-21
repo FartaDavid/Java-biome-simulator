@@ -11,6 +11,8 @@ public class Water extends Entities {
     private double turbidity;
     private double contaminantIndex;
     private boolean isFrozen;
+    private int time = 2; // fac un timer pentru a adauga humidity si waterRetention
+    private double quality;
 
     public Water(String type, String name, double mass, double salinity, double pH, double purity, double turbidity,
                  double contaminantIndex, boolean isFrozen) {
@@ -21,9 +23,10 @@ public class Water extends Entities {
         this.turbidity = turbidity;
         this.contaminantIndex = contaminantIndex;
         this.isFrozen = isFrozen;
+        this.quality = calcQuality();
     }
 
-    public String getWaterQuality() {
+    public double calcQuality() {
         double purity_score = purity / 100;
         double pH_score = 1 - Math.abs(pH - 7.5) / 7.5;
         double salinity_score = 1 - (salinity / 350);
@@ -38,10 +41,14 @@ public class Water extends Entities {
                 + 0.15 * contaminant_score
                 + 0.2 * frozen_score) * 100;
 
-        if (waterQuality >= 70) {
+        return waterQuality;
+    }
+
+    public String getWaterQuality() {
+        if (quality >= 70) {
             return "Good";
         }
-        if (waterQuality < 70 && waterQuality >= 40) {
+        if (quality < 70 && quality >= 40) {
             return "Moderate";
         }
         return "Poor";

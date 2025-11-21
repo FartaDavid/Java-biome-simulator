@@ -15,22 +15,22 @@ public class AirSetter {
             case "TemperateAir": // Sau "Temperat"
                 return new Temperat(airInput.getType(), airInput.getName(), airInput.getMass(),
                         airInput.getHumidity(), airInput.getTemperature(),
-                        airInput.getOxygenLevel(), airInput.getPollenLevel()); // La fel
+                        airInput.getOxygenLevel(), airInput.getPollenLevel());
 
             case "MountainAir":
                 return new Montan(airInput.getType(), airInput.getName(), airInput.getMass(),
                         airInput.getHumidity(), airInput.getTemperature(),
-                        airInput.getOxygenLevel(), airInput.getAltitude()); // La fel
+                        airInput.getOxygenLevel(), airInput.getAltitude());
 
             case "DesertAir":
                 return new Desert(airInput.getType(), airInput.getName(), airInput.getMass(),
                         airInput.getHumidity(), airInput.getTemperature(),
-                        airInput.getOxygenLevel(), airInput.getDustParticles()); // La fel
+                        airInput.getOxygenLevel(), airInput.getDustParticles());
 
             case "PolarAir":
                 return new Polar(airInput.getType(), airInput.getName(), airInput.getMass(),
                         airInput.getHumidity(), airInput.getTemperature(),
-                        airInput.getOxygenLevel(), airInput.getIceCrystalConcentration()); // La fel
+                        airInput.getOxygenLevel(), airInput.getIceCrystalConcentration());
 
             default:
                 return null;

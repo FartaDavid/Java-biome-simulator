@@ -21,6 +21,19 @@ public class Soil extends Entities {
         this.organicMatter = organicMatter;
     }
 
+    public void addWaterRetention() {
+        waterRetention += 0.1;
+    }
+
+    public void addOrganicMatter(int k) {
+        if (k == 2) {
+            this.organicMatter += 0.8;
+        }
+        if (k == 1) {
+            this.organicMatter += 0.5;
+        }
+    }
+
     public String qualitySoil() {
         if (quality >= 70) {
             return "good";

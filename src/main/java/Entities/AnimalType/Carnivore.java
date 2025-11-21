@@ -13,18 +13,6 @@ public class Carnivore extends Animal {
         setMass(animalMass);
     }
 
-    public void drinkWater(double waterToDrink) {
-        double animalMass = getMass();
-        animalMass += waterToDrink;
-        setMass(animalMass);
-    }
-
-    public void eatPlant(double plantMass) {
-        double animalMass = getMass();
-        animalMass += plantMass;
-        setMass(animalMass);
-    }
-
     @Override
     public double AttackProbability() {
         return 7.0;

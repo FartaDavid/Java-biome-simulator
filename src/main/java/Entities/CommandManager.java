@@ -19,11 +19,23 @@ public class CommandManager {
 
     public void commandManage(ArrayList<CommandInput> commandInput, ArrayNode output, Robot robot, GameMap map) {
 
+        ArrayList<Facts> facts = new ArrayList<>();
         boolean simStarted = false;
         int charging = 0;
+        int changeweather = 0;
+        int lastTimestamp = 0;
 
         for(CommandInput command : commandInput) {
             ObjectNode commandOutput = MAPPER.createObjectNode();
+
+            int currentTimestamp = command.getTimestamp();
+
+            for (int i = lastTimestamp + 1; i <= currentTimestamp; i++) {
+                map.VerifyWeather(i); // verifica daca vreun changeweather se schimba
+                map.verifyScannedObj();
+            }
+
+            lastTimestamp = currentTimestamp;
 
             commandOutput.put("command", command.getCommand());
 
@@ -86,10 +98,97 @@ public class CommandManager {
                         charging--;
                     } else if (simStarted) {
                         robot.resetEnergyPoint(command.getTimeToCharge());
+
                         charging = command.getTimeToCharge() + command.getTimestamp();
                         commandOutput.put("message", "Robot battery is charging.");
                     } else {
                         commandOutput.put("message","ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
+                case "changeWeatherConditions":
+                    if (simStarted) {
+                        boolean ok = map.changeWeather(command);
+                        if (ok)
+                            commandOutput.put("message", "The weather has changed.");
+                        else
+                            commandOutput.put("message", "ERROR: The weather change does not affect the environment. Cannot perform action");
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
+                case "scanObject":
+                    if (simStarted) {
+                        if (charging > command.getTimestamp()) {
+                            commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                            charging--;
+                        }
+                        else if (robot.getEnergyPoint() < 7) {
+                            commandOutput.put("message", "ERROR: Not enough battery left. Cannot perform action");
+                        }
+                        else {
+                            boolean ok = robot.scanObject(command, commandOutput, map, robot.getX(), robot.getY());
+
+                            if (!ok) {
+                                commandOutput.put("message", "ERROR: Object not found. Cannot perform action");
+                            }
+                            else {
+                                int energy = robot.getEnergyPoint();
+                                energy -= 7;
+                                robot.setEnergyPoint(energy);
+                            }
+                        }
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
+                case "learnFact":
+                    if (simStarted) {
+                        if (charging > command.getTimestamp()) {
+                            commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                            charging--;
+                        }
+                        else if (robot.getEnergyPoint() < 2) {
+                            commandOutput.put("message", "ERROR: Not enough battery left. Cannot perform action");
+                        }
+                        else {
+                            boolean ok = map.learnFact(facts, command);
+                            if (ok) {
+                                commandOutput.put("message", "The fact has been successfully saved in the database.");
+                                robot.setEnergyPoint(robot.getEnergyPoint() - 2);
+                            }
+                            else
+                                commandOutput.put("message", "ERROR: Subject not yet saved. Cannot perform action");
+                        }
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
+                case "printKnowledgeBase":
+                    if (simStarted) {
+                        this.printKnowlege(facts, commandOutput);
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    }
+                    break;
+                case "improveEnvironment":
+                    if (simStarted) {
+                        if (charging > command.getTimestamp()) {
+                            commandOutput.put("message", "ERROR: Robot still charging. Cannot perform action");
+                            charging--;
+                        }
+                        else if (robot.getEnergyPoint() < 10) {
+                            commandOutput.put("message", "ERROR: Not enough battery left. Cannot perform action");
+                        }
+                        else {
+                            this.imrpoveEnvironment(facts, commandOutput, map, command, robot);
+                        }
+                    }
+                    else {
+                        commandOutput.put("message", "ERROR: Simulation not started. Cannot perform action");
                     }
                     break;
             }
@@ -108,7 +207,6 @@ public class CommandManager {
         Soil soil = cell.getSoil();
         if (soil != null) {
             ObjectNode soilNode = MAPPER.createObjectNode();
-            // Adaptează gettere-le la denumirile din clasele tale
             soilNode.put("type", soil.getType());
             soilNode.put("name", soil.getName());
             soilNode.put("mass", soil.getMass());
@@ -140,8 +238,7 @@ public class CommandManager {
             output.set("soil", soilNode);
         }
 
-        // 3. Adaugă informațiile despre Plantă (doar dacă există)
-        // Conform exemplului, cheia este "plants" (plural) chiar dacă e un singur obiect
+        // adaug detaliile plantei
         Plant plant = cell.getPlant();
         if (plant != null) {
             ObjectNode plantNode = MAPPER.createObjectNode();
@@ -151,8 +248,7 @@ public class CommandManager {
             output.set("plants", plantNode);
         }
 
-        // 4. Adaugă informațiile despre Animal (doar dacă există)
-        // Similar, cheia este "animals" (plural)
+        // adaug detaliile animalului
         Animal animal = cell.getAnimal();
         if (animal != null) {
             ObjectNode animalNode = MAPPER.createObjectNode();
@@ -163,7 +259,7 @@ public class CommandManager {
             output.set("animals", animalNode);
         }
 
-        // 5. Adaugă informațiile despre Sursa de Apă (doar dacă există)
+        // adaug detaliile despre apa
         Water water = cell.getWater();
         if (water != null) {
             ObjectNode waterNode = MAPPER.createObjectNode();
@@ -173,7 +269,7 @@ public class CommandManager {
             output.set("water", waterNode);
         }
 
-        // 6. Adaugă informațiile despre Aer (presupunând că există mereu)
+        // adaug detaliile despre aer
         Air air = cell.getAir();
         if (air != null) {
             ObjectNode airNode = MAPPER.createObjectNode();
@@ -183,10 +279,13 @@ public class CommandManager {
             airNode.put("humidity", air.getHumidity());
             airNode.put("temperature", air.getTemperature());
             airNode.put("oxygenLevel", air.getOxygenLevel());
-            airNode.put("airQuality", air.getAirQuality());
+            if (air.getChangeWeather() == 0)
+                airNode.put("airQuality", air.getAirQuality());
+            else
+                airNode.put("airQuality", air.getChangedAir());
             if (air.getType().equals("DesertAir")) {
                 Desert desert = (Desert) air;
-                airNode.put("dustParticles", desert.getDustParticles());
+                airNode.put("desertStorm", desert.isDesertStorm());
             }
             if (air.getType().equals("MountainAir")) {
                 Montan montan = (Montan) air;
@@ -233,5 +332,100 @@ public class CommandManager {
             }
         }
         commandOutput.put("output", output);
+    }
+
+    public void printKnowlege(ArrayList<Facts> facts, ObjectNode commandOutput) {
+
+        // fac un array pt fact-uri
+        ArrayNode initial = MAPPER.createArrayNode();
+
+        for (Facts fact1 : facts) {
+            // fac un obiect pt fiecare fact in parte
+            ObjectNode fact = MAPPER.createObjectNode();
+            fact.put("topic", fact1.getComponents());
+            // fac un array pt components
+            ArrayNode subjects = MAPPER.createArrayNode();
+
+            for (String sub : fact1.getSubjects()) {
+                subjects.add(sub);
+            }
+
+            fact.put("facts", subjects);
+            // adaug la array-ul de fact-uri ce am acumulat
+            initial.add(fact);
+        }
+        commandOutput.put("output", initial);
+    }
+
+    public void imrpoveEnvironment(ArrayList<Facts> facts, ObjectNode commandOutput, GameMap map, CommandInput command, Robot robot) {
+
+        String improvementType = command.getImprovementType();
+        String component = command.getName();
+        String improvement = null;
+        boolean hasFact = false;
+
+        if (improvementType.contains("plant")) {
+            improvement = "plant";
+        }
+        if (improvementType.contains("fertilize")) {
+            improvement = "fertilize";
+        }
+        if (improvementType.contains("Humidity")) {
+            improvement = "increaseHumidity";
+        }
+        if (improvementType.contains("Moisture")) {
+            improvement = "increaseMoisture";
+        }
+
+        String requiredSubject = "Method to " + improvement;
+
+        for (Facts fact : facts) {
+            if (fact.getComponents().equals(component)) {
+                for (String subject : fact.getSubjects()) {
+                    if (subject.contains(requiredSubject)) {
+                        hasFact = true;
+                    }
+                }
+            }
+            if (hasFact) break;
+        }
+
+        boolean hasItem = robot.isInInventory(component);
+
+        if (!hasItem) {
+            commandOutput.put("message", "ERROR: Subject not yet saved. Cannot perform action");
+        }
+        else if (!hasFact) {
+            commandOutput.put("message", "ERROR: Fact not yet saved. Cannot perform action");
+        }
+        else {
+            Air air = map.getCell(robot.getX(), robot.getY()).getAir();
+            Soil soil = map.getCell(robot.getX(), robot.getY()).getSoil();
+
+            if (improvement.equals("plant")) {
+                air.setOxygenLevel(air.getOxygenLevel() + 0.3);
+                air.normalizeQuality(air.calculateAirQuality());
+                commandOutput.put("message", "The " + component + " was planted successfully.");
+            }
+            if (improvement.equals("fertilize")) {
+                soil.setOrganicMatter(soil.getOrganicMatter() + 0.3);
+                commandOutput.put("message", "The " + soil.getName() + " was successfully fertilized using " + component);
+            }
+            if (improvement.equals("increaseHumidity")) {
+                if (air != null) {
+                    air.setHumidity(air.getHumidity() + 0.2);
+                    air.normalizeQuality(air.calculateAirQuality());
+                    commandOutput.put("message", "The " + air.getName() + " was successfully increased using " + component);
+                }
+            }
+            if (improvement.equals("increaseMoisture")) {
+                if (soil != null) {
+                    soil.setWaterRetention(soil.getWaterRetention() + 0.2);
+                    commandOutput.put("message", "The moisture was successfully increased using " + component);
+                }
+            }
+
+            robot.setEnergyPoint(robot.getEnergyPoint() - 10);
+        }
     }
 }

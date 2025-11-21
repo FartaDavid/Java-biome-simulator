@@ -8,27 +8,24 @@ import lombok.Setter;
 public class Tropical extends Air {
     private double co2Level;
 
+    public double calculateAirQuality() {
+        return super.getOxygenLevel() * 2 + super.getHumidity() * 0.5 - co2Level * 0.01;
+    }
+
     public Tropical(String type, String name, double mass, double humidity, double temperature, double oxygenLevel, double co2Level) {
         super(type, name, mass, humidity, temperature, oxygenLevel);
         this.co2Level = co2Level;
 
-        double quality = oxygenLevel * 2 + humidity * 0.5 - co2Level * 0.01;
-        quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
-        quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
-        super.setAirQuality(quality);
+        normalizeQuality(calculateAirQuality());
 
-        double toxicityAQ = 100.0 * (1.0 - quality / 82.0);
-        toxicityAQ = Math.round(toxicityAQ * 100.0) / 100.0; // final result toxicity
-        toxicityAQ = Math.max(0, Math.min(100, toxicityAQ)); // normalizez scorul
-        toxicityAQ = Math.round(toxicityAQ * 100.0) / 100.0; // rotunjesc scorul
-
-        super.setToxicity(toxicityAQ);
+        double toxicityAQ = 100.0 * (1.0 - calculateAirQuality() / 82.0);
+        getToxicity(toxicityAQ);
     }
 
-    public double Rainfall(double rainfall) {
+    public void Rainfall(double rainfall) {
         double quality = super.getAirQuality();
         quality += rainfall * 0.3;
 
-        return quality;
+        super.setChangedAir(quality);
     }
 }
