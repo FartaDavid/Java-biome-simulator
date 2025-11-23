@@ -9,4 +9,6 @@ import java.util.ArrayList;
 public class Facts {
     private String components;
     private ArrayList<String> subjects;
+
+
 }

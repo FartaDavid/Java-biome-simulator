@@ -1,6 +1,5 @@
 package Entities;
 
-import Entities.AirType.Desert;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,27 +13,31 @@ public abstract class Air extends Entities {
     private double toxicity;
     private int changeWeather; // timer pentru a schimba la normal calitatea aerului
 
-    public Air(String type, String name, double mass, double humidity, double temperature, double oxygenLevel) {
+    public Air(final String type, final String name, final double mass, final double humidity,
+               final double temperature, final double oxygenLevel) {
         super(type, name, mass);
         this.humidity = humidity;
         this.temperature = temperature;
         this.oxygenLevel = oxygenLevel;
     }
 
+    /* funcite pentru calcularea calitatii aerului */
     public abstract double calculateAirQuality();
 
     public void normalizeQuality(double quality) {
         quality = Math.max(0, Math.min(100, quality)); // normalizez scorul
         quality = Math.round(quality * 100.0) / 100.0; // rotunjesc scorul
-        if (quality >= 100)
+        if (quality >= 100) {
             quality = 100;
+        }
         this.airQuality = quality;
     }
 
     public void getToxicity(double toxicityAQ) {
-        toxicityAQ = Math.round(toxicityAQ * 100.0) / 100.0; // final result toxicity
-        toxicityAQ = Math.max(0, Math.min(100, toxicityAQ)); // normalizez scorul
-        toxicityAQ = Math.round(toxicityAQ * 100.0) / 100.0; // rotunjesc scorul
+        double hundo = 100.0;
+        toxicityAQ = Math.round(toxicityAQ * hundo) / hundo; // final result toxicity
+        toxicityAQ = Math.max(0, Math.min(hundo, toxicityAQ)); // normalizez scorul
+        toxicityAQ = Math.round(toxicityAQ * hundo) / hundo; // rotunjesc scorul
         this.toxicity = toxicityAQ;
     }
 

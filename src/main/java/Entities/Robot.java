@@ -109,6 +109,7 @@ public class Robot {
                     if (water != null) {
                         output.put("message", "The scanned object is water.");
                         water.objectScanned();
+
                         inventory.add(water.getName());
                         return true;
                     } else
@@ -120,6 +121,7 @@ public class Robot {
             if (animal != null) {
                 animal.objectScanned();
                 output.put("message", "The scanned object is an animal.");
+
                 inventory.add(animal.getName());
                 return true;
             } else {
@@ -132,6 +134,7 @@ public class Robot {
             if (plant != null) {
                 output.put("message", "The scanned object is a plant.");
                 plant.objectScanned();
+
                 inventory.add(plant.getName());
                 return true;
             } else {

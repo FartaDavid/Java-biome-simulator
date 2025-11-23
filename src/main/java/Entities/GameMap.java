@@ -107,7 +107,7 @@ public class GameMap {
             case "rainfall":
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        if (cell[i][j].getAir().getClass() == Tropical.class) {
+                        if (cell[i][j].getAir().getType().equals("TropicalAir")) {
                             Tropical tropical = (Tropical) cell[i][j].getAir();
 
                             tropical.setchangeWeather();
@@ -119,7 +119,7 @@ public class GameMap {
             case "polarStorm":
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        if (cell[i][j].getAir().getClass() == Polar.class) {
+                        if (cell[i][j].getAir().getType().equals("PolarAir")) {
                             Polar polar = (Polar) cell[i][j].getAir();
 
                             polar.setchangeWeather();
@@ -131,7 +131,7 @@ public class GameMap {
             case "newSeason":
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        if (cell[i][j].getAir().getClass() == Temperat.class) {
+                        if (cell[i][j].getAir().getType().equals("TemperateAir")) {
                             Temperat temperat = (Temperat) cell[i][j].getAir();
 
                             temperat.setchangeWeather();
@@ -143,7 +143,7 @@ public class GameMap {
             case "desertStorm":
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        if (cell[i][j].getAir().getClass() == Desert.class) {
+                        if (cell[i][j].getAir().getType().equals("DesertAir")) {
                             Desert desert = (Desert) cell[i][j].getAir();
 
                             desert.setchangeWeather();
@@ -155,7 +155,7 @@ public class GameMap {
             case "peopleHiking":
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < y; j++) {
-                        if (cell[i][j].getAir().getClass() == Montan.class) {
+                        if (cell[i][j].getAir().getType().equals("MountainAir")) {
                             Montan montan = (Montan) cell[i][j].getAir();
 
                             montan.setchangeWeather();
@@ -256,7 +256,7 @@ public class GameMap {
                         }
 
                         verified[i][j] = true;
-                        boolean predator = (animal.getClass() == Carnivore.class || animal.getClass() == Parasite.class);
+                        boolean predator = (animal.getType().equals("Carnivore") || animal.getType().equals("Parasite"));
                         int k = 0;
 
                         if (plant != null) {
@@ -268,10 +268,19 @@ public class GameMap {
                         if (water != null) {
                             if (water.isScanned()) {
                                 animal.drinkWater(water);
+                                if (water.getMass() == 0) {
+                                    water = null;
+                                }
                                 k++;
                             }
                         }
+
                         soil.addOrganicMatter(k);
+                        if (k == 0) {
+                            if (animal.getStatus().equals("well-fed")) {
+                                soil.addOrganicMatter(1);
+                            }
+                        }
 
                         animal.setTimer(animal.getTimer() - 1);
 
@@ -279,16 +288,23 @@ public class GameMap {
                             Cell bestCell = animal.move(this, i, j, predator);
 
                             if (predator) {
+                                animal.setTimer(2);
+                                if (bestCell.getAnimal() != null && bestCell != cell[i][j]) {
+                                    bestCell.getSoil().addOrganicMatter(1);
+                                    animal.eatAnimal(bestCell.getAnimal());
+                                }
                                 bestCell.setAnimal(animal);
-                                cell[i][j].setAnimal(null);
                                 verified[bestCell.getX()][bestCell.getY()] = true;
-                                bestCell.getSoil().addOrganicMatter(1);
-                                bestCell.getAnimal().setTimer(2);
+
+                                if (cell[i][j] != bestCell)
+                                cell[i][j].setAnimal(null);
                             }
                             else {
                                 animal.setTimer(2);
                                 bestCell.setAnimal(animal);
                                 verified[bestCell.getX()][bestCell.getY()] = true;
+
+                                if (cell[i][j] != bestCell)
                                 cell[i][j].setAnimal(null);
                             }
                         }

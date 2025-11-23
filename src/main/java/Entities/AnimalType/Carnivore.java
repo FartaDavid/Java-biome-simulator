@@ -17,8 +17,4 @@ public class Carnivore extends Animal {
     public double AttackProbability() {
         return 7.0;
     }
-
-    public double addOrganicMatter(double organicMatter) {
-        return organicMatter + 0.5;
-    }
 }

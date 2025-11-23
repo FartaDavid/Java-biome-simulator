@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Animal extends Entities {
+public abstract class Animal extends Entities {
     private String status = "hungry";
     private int timer = 2;
 
@@ -12,9 +12,7 @@ public class Animal extends Entities {
         super(type, name, mass);
     }
 
-    public double AttackProbability() {
-        return 0;
-    }
+    public abstract double AttackProbability();
 
     public Cell move(GameMap map, int x, int y, boolean predator) {
         Cell[] cells = new Cell[4];
@@ -35,35 +33,44 @@ public class Animal extends Entities {
         }
 
         Cell bestcell = null;
-        double waterQlt = 0;
+        double waterQlt = Double.MIN_VALUE;
 
         for (int i = 0; i < 4; i++) {
             if (cells[i] != null) {
-                if (!predator && cells[i].getAnimal() != null)
-                    continue;
+                if (!predator && cells[i].getAnimal() != null) continue;
                 if (cells[i].getPlant() != null && cells[i].getWater() != null) {
-                    waterQlt = cells[i].getWater().calcQuality();
-                    bestcell = cells[i];
+                    if (cells[i].getPlant().isScanned() && cells[i].getWater().isScanned()) {
+                        if (waterQlt < cells[i].getWater().calcQuality()) {
+                            waterQlt = cells[i].getWater().calcQuality();
+                            bestcell = cells[i];
+                        }
+                    }
                 }
             }
         }
+
         if (bestcell != null)
             return bestcell;
 
         for (int i = 0; i < 4; i++) {
             if (cells[i] != null) {
-                if (!predator && cells[i].getAnimal() != null) {
-                    if (cells[i].getPlant() != null) {
-                        bestcell = cells[i];
+                if (!predator && cells[i].getAnimal() != null) continue;
+                if (cells[i].getPlant() != null) {
+                    if (cells[i].getPlant().isScanned()) {
+                        return cells[i];
                     }
                 }
             }
         }
-        if (bestcell != null) return bestcell;
+
+        if (bestcell != null)
+            return bestcell;
+
         for (int i = 0; i < 4; i++) {
             if (cells[i] != null) {
-                if (!predator && cells[i].getAnimal() != null) {
-                    if (cells[i].getWater() != null) {
+                if (!predator && cells[i].getAnimal() != null) continue;
+                if (cells[i].getWater() != null) {
+                    if (cells[i].getWater().isScanned()) {
                         if (cells[i].getWater().getQuality() > waterQlt) {
                             bestcell = cells[i];
                             waterQlt = cells[i].getWater().getQuality();
@@ -72,15 +79,22 @@ public class Animal extends Entities {
                 }
             }
         }
-        if (bestcell != null) return bestcell;
+
+        if (bestcell != null)
+            return bestcell;
 
         if (bestcell == null) {
             for (int i = 0; i < 4; i++) {
-                if (cells[i] != null)
+                if (cells[i] != null) {
                     if (!predator && cells[i].getAnimal() != null)
                         continue;
                     return cells[i];
+                }
             }
+        }
+
+        if (bestcell == null) {
+            bestcell = map.getCell(x, y);
         }
         return bestcell;
     }

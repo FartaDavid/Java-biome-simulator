@@ -440,22 +440,26 @@ public class CommandManager {
                 air.setOxygenLevel(air.getOxygenLevel() + 0.3);
                 air.normalizeQuality(air.calculateAirQuality());
                 commandOutput.put("message", "The " + component + " was planted successfully.");
+                robot.removeFromInventory(component);
             }
             if (improvement.equals("fertilize")) {
                 soil.setOrganicMatter(soil.getOrganicMatter() + 0.3);
                 commandOutput.put("message", "The soil was successfully fertilized using " + component);
+                robot.removeFromInventory(component);
             }
             if (improvement.equals("increaseHumidity")) {
                 if (air != null) {
                     air.setHumidity(air.getHumidity() + 0.2);
                     air.normalizeQuality(air.calculateAirQuality());
-                    commandOutput.put("message", "The " + air.getName() + " was successfully increased using " + component);
+                    commandOutput.put("message", "The humidity was successfully increased using " + component);
+                    robot.removeFromInventory(component);
                 }
             }
             if (improvement.equals("increaseMoisture")) {
                 if (soil != null) {
                     soil.setWaterRetention(soil.getWaterRetention() + 0.2);
                     commandOutput.put("message", "The moisture was successfully increased using " + component);
+                    robot.removeFromInventory(component);
                 }
             }
 
