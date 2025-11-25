@@ -1,15 +1,11 @@
 package main;
 
-import Entities.CommandManager;
-import Entities.GameMap;
-import Entities.MapManager;
-import Entities.Robot;
+import entities.CommandManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import fileio.CommandInput;
 import fileio.InputLoader;
-import fileio.SimulationInput;
 
 import java.io.File;
 import java.io.IOException;
