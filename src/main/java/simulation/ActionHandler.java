@@ -1,7 +1,12 @@
-package entities;
+package simulation;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import entities.Air;
+import entities.Robot;
+import entities.Soil;
 import fileio.CommandInput;
+import map.Cell;
+
 import java.util.ArrayList;
 
 /**
@@ -138,11 +143,14 @@ public final class ActionHandler {
         if ("plant".equals(improvement) && air != null) {
             air.setOxygenLevel(air.getOxygenLevel() + OXYGEN_INCREMENT);
             air.normalizeQuality(air.calculateAirQuality());
+
             commandOutput.put("message", "The " + component + " was planted successfully.");
             robot.removeFromInventory(component);
         }
         if ("fertilize".equals(improvement) && soil != null) {
             soil.setOrganicMatter(soil.getOrganicMatter() + ORGANIC_INCREMENT);
+            soil.calculateQuality();
+
             commandOutput.put("message",
                     "The soil was successfully fertilized using " + component);
             robot.removeFromInventory(component);
@@ -150,12 +158,15 @@ public final class ActionHandler {
         if ("increase humidity".equals(improvement) && air != null) {
             air.setHumidity(air.getHumidity() + HUMIDITY_INCREMENT);
             air.normalizeQuality(air.calculateAirQuality());
+
             commandOutput.put("message",
                     "The humidity was successfully increased using " + component);
             robot.removeFromInventory(component);
         }
         if ("increaseMoisture".equals(improvement) && soil != null) {
             soil.setWaterRetention(soil.getWaterRetention() + MOISTURE_INCREMENT);
+            soil.calculateQuality();
+
             commandOutput.put("message",
                     "The moisture was successfully increased using " + component);
             robot.removeFromInventory(component);

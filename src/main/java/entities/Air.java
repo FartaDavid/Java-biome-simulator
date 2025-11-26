@@ -21,10 +21,10 @@ public abstract class Air extends Entities {
     private double temperature;
     private double oxygenLevel;
     private double airQuality;
-    // folosesc variabila changedAir pentru a salva calitatea la comanda changeaWeather
+    // using changedAir to store the modified air quality during weather changes
     private double changedAir;
     private double toxicity;
-    private int changeWeather; // timer pentru a schimba la normal calitatea aerului
+    private int changeWeather; // timer for weather change
 
     public Air(final String type, final String name, final double mass, final double humidity,
                final double temperature, final double oxygenLevel) {
@@ -47,9 +47,9 @@ public abstract class Air extends Entities {
      * @param quality the air quality score to be normalized.
      */
     public void normalizeQuality(final double quality) {
-        // normalizez scorul
+        // normalize score
         double localQuality = Math.max(MIN_QUALITY, Math.min(MAX_QUALITY, quality));
-        // rotunjesc scorul
+        // round score
         localQuality = Math.round(localQuality * ROUNDING_FACTOR) / ROUNDING_FACTOR;
         if (localQuality >= MAX_QUALITY) {
             localQuality = MAX_QUALITY;
@@ -65,9 +65,9 @@ public abstract class Air extends Entities {
     public void getToxicity(final double toxicityAQ) {
         // final result toxicity
         double localToxicity = Math.round(toxicityAQ * ROUNDING_FACTOR) / ROUNDING_FACTOR;
-        // normalizez scorul
+        // normalize score
         localToxicity = Math.max(MIN_QUALITY, Math.min(MAX_QUALITY, localToxicity));
-        // rotunjesc scorul
+        // rounding score
         localToxicity = Math.round(localToxicity * ROUNDING_FACTOR) / ROUNDING_FACTOR;
         this.toxicity = localToxicity;
     }
@@ -100,4 +100,11 @@ public abstract class Air extends Entities {
         }
         return "poor";
     }
+
+    /**
+     * Abstract method to determine if the air is toxic.
+     *
+     * @return true if the air is toxic, false otherwise.
+     */
+    public abstract boolean isToxic();
 }

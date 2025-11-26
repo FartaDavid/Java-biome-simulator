@@ -17,6 +17,7 @@ public final class Desert extends Air {
     private static final double MAX_PERCENTAGE = 100.0;
     private static final double TOXICITY_DENOMINATOR = 65.0;
     private static final double STORM_PENALTY = 30.0;
+    private static final double TOXICITY = 0.8;
 
     private double dustParticles;
     private boolean desertStorm = false;
@@ -71,5 +72,9 @@ public final class Desert extends Air {
 
         this.desertStorm = true;
         super.setChangedAir(quality);
+    }
+
+    public boolean isToxic() {
+        return super.getToxicity() > TOXICITY * TOXICITY_DENOMINATOR;
     }
 }

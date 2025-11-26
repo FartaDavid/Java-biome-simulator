@@ -1,8 +1,10 @@
-package entities;
+package simulation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.Robot;
 import lombok.Getter;
 import lombok.Setter;
+import map.GameMap;
 
 import java.util.ArrayList;
 

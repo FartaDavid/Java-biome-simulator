@@ -1,5 +1,6 @@
-package entities;
+package entities.setters;
 
+import entities.Animal;
 import entities.animalType.Carnivore;
 import entities.animalType.Detritivores;
 import entities.animalType.Herbivores;

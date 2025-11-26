@@ -2,11 +2,15 @@ package entities.animalType;
 
 import entities.Animal;
 
+/**
+ * Represents the Herbivores animal type.
+ * Defines specific behavior for attack probability.
+ */
 public class Herbivores extends Animal {
 
     /**
-     * Valoarea probabilitatii de atac pentru ierbivore.
-     * Elimina eroarea de 'Magic Number'.
+     * The attack probability value for herbivores.
+     * Removes the 'magic number' error.
      */
     private static final double HERBIVORE_ATTACK_PROBABILITY = 1.5;
 

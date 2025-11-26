@@ -1,11 +1,16 @@
-package entities;
+package simulation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import entities.Robot;
+import environment.EnvironmentReporter;
 import fileio.CommandInput;
 import fileio.InputLoader;
 import fileio.SimulationInput;
+import map.GameMap;
+import map.MapManager;
+
 import java.util.ArrayList;
 
 /**

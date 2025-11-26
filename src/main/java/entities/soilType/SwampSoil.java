@@ -40,18 +40,27 @@ public final class SwampSoil extends Soil {
         super(type, name, mass, nitrogen, waterRetention, soilpH, organicMatter);
         this.waterLogging = waterLogging;
 
-        double quality = nitrogen * NITROGEN_FACTOR
-                + organicMatter * ORGANIC_MATTER_FACTOR
-                - waterLogging * WATER_LOGGING_PENALTY;
-
-        // normalizez scorul
-        quality = Math.max(MIN_QUALITY, Math.min(MAX_QUALITY, quality));
-
-        // rotunjesc scorul
-        quality = (double) Math.round(quality * ROUNDING_FACTOR) / ROUNDING_FACTOR;
-
-        super.setQuality(quality);
+        calculateQuality();
 
         super.setBlockProbability(waterLogging * BLOCK_PROBABILITY_FACTOR);
+    }
+
+    /** *
+     * Calculates the quality score for Swamp Soil.
+     * Quality is influenced positively by nitrogen and organic matter,
+     * and negatively by water logging.
+     */
+    public void calculateQuality() {
+        double quality = getNitrogen() * NITROGEN_FACTOR
+                + getOrganicMatter() * ORGANIC_MATTER_FACTOR
+                - getWaterLogging() * WATER_LOGGING_PENALTY;
+
+        // Normalize score between 0 and 100
+        quality = Math.max(MIN_QUALITY, Math.min(MAX_QUALITY, quality));
+
+        // Round score
+        quality = Math.round(quality * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+
+        super.setQuality(quality);
     }
 }

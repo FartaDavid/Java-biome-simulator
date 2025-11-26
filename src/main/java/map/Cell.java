@@ -1,5 +1,11 @@
-package entities;
+package map;
 
+import entities.Air;
+import entities.Animal;
+import entities.Plant;
+import entities.Robot;
+import entities.Soil;
+import entities.Water;
 import lombok.Getter;
 import lombok.Setter;
 

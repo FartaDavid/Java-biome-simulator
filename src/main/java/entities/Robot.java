@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.CommandInput;
 import lombok.Getter;
 import lombok.Setter;
+import map.Cell;
+import map.GameMap;
 
 import java.util.ArrayList;
 
@@ -60,7 +62,7 @@ public final class Robot {
         }
 
         Cell bestCell = null;
-        double maxQlt = Integer.MAX_VALUE;
+        double maxQlt = Double.MAX_VALUE;
 
         // parcurg vectorul pentru a afla cea mai buna celula
         for (int i = 0; i < NEIGHBORS; i++) {
@@ -94,8 +96,8 @@ public final class Robot {
                 count++;
             }
 
-            double a = Math.abs(sum / count);
-            int result = (int) Math.round(a);
+            double mean = Math.abs(sum / count);
+            int result = (int) Math.round(mean);
 
             if (result < maxQlt) {
                 maxQlt = result;

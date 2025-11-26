@@ -16,6 +16,7 @@ public final class Temperat extends Air {
     private static final double MAX_PERCENTAGE = 100.0;
     private static final double TOXICITY_DENOMINATOR = 84.0;
     private static final double SPRING_PENALTY = 15.0;
+    private static final double TOXICITY = 0.8;
 
     private double pollenLevel;
 
@@ -53,7 +54,7 @@ public final class Temperat extends Air {
         normalizeQuality(calculateAirQuality());
 
         double toxicityAQ = MAX_PERCENTAGE
-                * (1.0 - calculateAirQuality() / TOXICITY_DENOMINATOR);
+                * (1.0 - getAirQuality() / TOXICITY_DENOMINATOR);
         getToxicity(toxicityAQ);
     }
 
@@ -69,5 +70,9 @@ public final class Temperat extends Air {
         quality -= seasonPenalty;
 
         super.setChangedAir(quality);
+    }
+
+    public boolean isToxic() {
+        return super.getToxicity() > TOXICITY * TOXICITY_DENOMINATOR;
     }
 }

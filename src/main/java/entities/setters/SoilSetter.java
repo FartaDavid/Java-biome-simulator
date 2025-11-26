@@ -1,5 +1,6 @@
-package entities;
+package entities.setters;
 
+import entities.Soil;
 import entities.soilType.DesertSoil;
 import entities.soilType.ForestSoil;
 import entities.soilType.GrasslandSoil;

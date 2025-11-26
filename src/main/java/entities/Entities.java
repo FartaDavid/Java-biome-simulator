@@ -7,7 +7,7 @@ import lombok.Setter;
 public class Entities {
 
     /**
-     * Factorul de multiplicare pentru rotunjirea la doua zecimale.
+     * The multiplication factor for rounding to two decimal places.
      */
     private static final double ROUNDING_FACTOR = 100.0;
 
@@ -23,14 +23,19 @@ public class Entities {
     }
 
     /**
-     * Marcheaza entitatea ca fiind scanata.
-     * Metoda este finala pentru a respecta regula de Design for Extension.
+     * Marks the entity as scanned.
+     * This method is final to respect the Design for Extension rule.
      */
     public final void objectScanned() {
         scanned = true;
     }
 
-    protected final double roundTwoDecimals(final double value) {
+    /**
+     * Rounds a double value to two decimal places.
+     * @param value The value to be rounded.
+     * @return The rounded value.
+     */
+    public final double roundTwoDecimals(final double value) {
         return Math.round(value * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 }

@@ -1,4 +1,4 @@
-package entities;
+package simulation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +9,4 @@ import java.util.ArrayList;
 public class Facts {
     private String components;
     private ArrayList<String> subjects;
-
-
 }

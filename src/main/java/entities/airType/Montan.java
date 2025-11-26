@@ -18,6 +18,7 @@ public final class Montan extends Air {
     private static final double MAX_PERCENTAGE = 100.0;
     private static final double TOXICITY_DENOMINATOR = 78.0;
     private static final double HIKER_PENALTY = 0.1;
+    private static final double TOXICITY = 0.8;
 
     private double altitude;
 
@@ -71,5 +72,9 @@ public final class Montan extends Air {
         quality -= numberOfHikers * HIKER_PENALTY;
 
         super.setChangedAir(quality);
+    }
+
+    public boolean isToxic() {
+        return super.getToxicity() > TOXICITY * TOXICITY_DENOMINATOR;
     }
 }

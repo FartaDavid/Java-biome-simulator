@@ -4,17 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Setter @Getter
-public class Soil extends Entities {
+public abstract class Soil extends Entities {
 
-    /** Increment pentru retentia apei. */
+    /** Increment for water retention. */
     private static final double WATER_INCREMENT = 0.1;
-    /** Ados de materie organica pentru k=2. */
+    /** Organic matter addition for k=2. */
     private static final double ORGANIC_ADD_HIGH = 0.8;
-    /** Ados de materie organica pentru k=1. */
+    /** Organic matter addition for k=1. */
     private static final double ORGANIC_ADD_LOW = 0.5;
-    /** Pragul de calitate pentru sol bun. */
+    /** Quality threshold for good soil. */
     private static final double QUALITY_GOOD_THRESHOLD = 70.0;
-    /** Pragul de calitate pentru sol moderat. */
+    /** Quality threshold for moderate soil. */
     private static final double QUALITY_MODERATE_THRESHOLD = 40.0;
 
     private double nitrogen;
@@ -35,28 +35,34 @@ public class Soil extends Entities {
     }
 
     /**
-     * Creste retentia apei cu o valoare fixa.
+     * Increases water retention by a fixed value.
      */
     public final void addWaterRetention() {
         waterRetention += WATER_INCREMENT;
     }
 
     /**
-     * Adauga materie organica in functie de factorul k.
-     * @param k Factorul de decizie (1 sau 2).
+     * Adds organic matter based on factor k.
+     * @param k The decision factor (1 or 2).
      */
     public final void addOrganicMatter(final int k) {
-        if (k == 2) {
+        if (k >= 2) {
             this.organicMatter += ORGANIC_ADD_HIGH;
-        }
-        if (k == 1) {
+        } else if (k == 1) {
             this.organicMatter += ORGANIC_ADD_LOW;
         }
+
     }
 
     /**
-     * Determina calitatea solului bazata pe scorul de calitate.
-     * @return Un string reprezentand calitatea ("good", "moderate", "poor").
+     * Calculates the soil quality score.
+     * This method is abstract and must be implemented in derived classes.
+     */
+    public abstract void calculateQuality();
+
+    /**
+     * Determines soil quality based on the quality score.
+     * @return A string representing the quality ("good", "moderate", "poor").
      */
     public final String qualitySoil() {
         if (quality >= QUALITY_GOOD_THRESHOLD) {

@@ -1,11 +1,29 @@
-package entities;
-
+package environment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import entities.airType.*;
-import entities.soilType.*;
+import entities.Air;
+import entities.Animal;
+import entities.Plant;
+import entities.Robot;
+import entities.Soil;
+import entities.Water;
+import entities.airType.Desert;
+import entities.airType.Montan;
+import entities.airType.Polar;
+import entities.airType.Temperat;
+import entities.airType.Tropical;
+import entities.soilType.DesertSoil;
+import entities.soilType.ForestSoil;
+import entities.soilType.GrasslandSoil;
+import entities.soilType.SwampSoil;
+import entities.soilType.TundraSoil;
+import map.Cell;
+import map.GameMap;
+import simulation.Facts;
+import simulation.SimulationContext;
+
 import java.util.ArrayList;
 
 /**
@@ -29,7 +47,7 @@ public final class EnvironmentReporter {
 
         ObjectNode output = mapper.createObjectNode();
 
-        // -- Soil Reporting --
+        // Soil printing
         Soil soil = cell.getSoil();
         if (soil != null) {
             ObjectNode soilNode = mapper.createObjectNode();
@@ -56,7 +74,7 @@ public final class EnvironmentReporter {
             output.set("soil", soilNode);
         }
 
-        // -- Plant Reporting --
+        // Plant printing
         Plant plant = cell.getPlant();
         if (plant != null) {
             ObjectNode plantNode = mapper.createObjectNode();
@@ -66,7 +84,7 @@ public final class EnvironmentReporter {
             output.set("plants", plantNode);
         }
 
-        // -- Animal Reporting --
+        // Animal printing
         Animal animal = cell.getAnimal();
         if (animal != null) {
             ObjectNode animalNode = mapper.createObjectNode();
@@ -76,7 +94,7 @@ public final class EnvironmentReporter {
             output.set("animals", animalNode);
         }
 
-        // -- Water Reporting --
+        // Water printing
         Water water = cell.getWater();
         if (water != null) {
             ObjectNode waterNode = mapper.createObjectNode();
@@ -86,7 +104,7 @@ public final class EnvironmentReporter {
             output.set("water", waterNode);
         }
 
-        // -- Air Reporting --
+        // Air printing
         Air air = cell.getAir();
         if (air != null) {
             ObjectNode airNode = mapper.createObjectNode();

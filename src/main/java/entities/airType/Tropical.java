@@ -17,6 +17,7 @@ public final class Tropical extends Air {
     private static final double MAX_PERCENTAGE = 100.0;
     private static final double TOXICITY_DENOMINATOR = 82.0;
     private static final double RAINFALL_BONUS = 0.3;
+    private static final double TOXICITY = 0.8;
 
     private double co2Level;
 
@@ -70,5 +71,9 @@ public final class Tropical extends Air {
         quality += rainfall * RAINFALL_BONUS;
 
         super.setChangedAir(quality);
+    }
+
+    public boolean isToxic() {
+        return super.getToxicity() > TOXICITY * TOXICITY_DENOMINATOR;
     }
 }

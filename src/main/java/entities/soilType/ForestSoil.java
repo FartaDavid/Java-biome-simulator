@@ -26,23 +26,32 @@ public class ForestSoil extends Soil {
         super(type, name, mass, nitrogen, waterRetention, soilpH, organicMatter);
         this.leaflitter = leaflitter;
 
-        double quality = nitrogen * NITROGEN_WEIGHT
-                + organicMatter * ORGANIC_WEIGHT
-                + waterRetention * WATER_WEIGHT
-                + leaflitter * LITTER_WEIGHT;
-
-        // normalizez scorul
-        quality = Math.max(0, Math.min(MAX_SCORE, quality));
-
-        // rotunjesc scorul
-        quality = (double) Math.round(quality * ROUNDING_PRECISION) / ROUNDING_PRECISION;
-
-        super.setQuality(quality);
+        calculateQuality();
 
         double blockProb = (waterRetention * BLOCK_WATER_WEIGHT
                 + leaflitter * BLOCK_LITTER_WEIGHT)
                 / BLOCK_DIVISOR * PERCENTAGE_FACTOR;
 
         super.setBlockProbability(blockProb);
+    }
+
+    /** *
+     * Calculates the quality score for Forest Soil.
+     * Quality is influenced positively by nitrogen, organic matter,
+     * water retention, and leaf litter.
+     */
+    public void calculateQuality() {
+        double quality = getNitrogen() * NITROGEN_WEIGHT
+                + getOrganicMatter() * ORGANIC_WEIGHT
+                + getWaterRetention() * WATER_WEIGHT
+                + getLeaflitter() * LITTER_WEIGHT;
+
+        // Normalize score between 0 and 100
+        quality = Math.max(0, Math.min(MAX_SCORE, quality));
+
+        // Round score
+        quality = (double) Math.round(quality * ROUNDING_PRECISION) / ROUNDING_PRECISION;
+
+        super.setQuality(quality);
     }
 }

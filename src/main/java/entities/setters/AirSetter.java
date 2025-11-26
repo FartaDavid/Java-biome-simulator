@@ -1,5 +1,6 @@
-package entities;
+package entities.setters;
 
+import entities.Air;
 import entities.airType.Desert;
 import entities.airType.Montan;
 import entities.airType.Polar;
@@ -34,7 +35,7 @@ public final class AirSetter {
                         airInput.getTemperature(), airInput.getOxygenLevel(),
                         airInput.getCo2Level());
 
-            case "TemperateAir": // Sau "Temperat"
+            case "TemperateAir":
                 return new Temperat(airInput.getType(), airInput.getName(),
                         airInput.getMass(), airInput.getHumidity(),
                         airInput.getTemperature(), airInput.getOxygenLevel(),

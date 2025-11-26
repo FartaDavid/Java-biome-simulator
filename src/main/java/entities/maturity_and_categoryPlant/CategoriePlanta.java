@@ -19,10 +19,10 @@ public enum CategoriePlanta {
     }
 
     /**
-     * Returneaza categoria plantei in functie de numele tipului (String).
+     * Returns the plant category based on the type name (String).
      *
-     * @param type Tipul plantei ca String.
-     * @return Valoarea enum corespunzatoare.
+     * @param type The plant type as a String.
+     * @return The corresponding enum value.
      */
     public static CategoriePlanta getCategoryByType(final String type) {
         return CategoriePlanta.valueOf(type);

@@ -2,6 +2,8 @@ package entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import map.Cell;
+import map.GameMap;
 
 /**
  * Abstract class representing an Animal entity.
@@ -15,6 +17,7 @@ public abstract class Animal extends Entities {
 
     private String status = "hungry";
     private int timer = 2;
+    private int k = 0;
 
     public Animal(final String type, final String name, final double mass) {
         super(type, name, mass);

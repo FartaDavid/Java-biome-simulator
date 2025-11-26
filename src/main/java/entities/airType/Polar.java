@@ -18,9 +18,10 @@ public class Polar extends Air {
     // -------------------- CONSTANTE PENTRU MAGIC NUMBERS --------------------
     private static final double BASE_QUALITY_BONUS = 100.0;
     private static final double ICE_CRYSTAL_FACTOR = 0.05;
-    private static final double MAX_AQ_VALUE = 142.0;
+    private static final double TOXICITY_DENOMINATOR = 142.0;
     private static final double TOXICITY_BASE = 100.0;
     private static final double STORM_PENALTY_FACTOR = 0.2;
+    private static final double TOXICITY = 0.8;
     // -------------------------------------------------------------------------
 
     /**
@@ -61,7 +62,7 @@ public class Polar extends Air {
         normalizeQuality(calculateAirQuality());
 
         double toxicityAQ =
-                TOXICITY_BASE * (1.0 - calculateAirQuality() / MAX_AQ_VALUE);
+                TOXICITY_BASE * (1.0 - calculateAirQuality() / TOXICITY_DENOMINATOR);
 
         getToxicity(toxicityAQ);
     }
@@ -76,5 +77,14 @@ public class Polar extends Air {
         quality -= windSpeed * STORM_PENALTY_FACTOR;
 
         super.setChangedAir(quality);
+    }
+
+    /**
+     * Determines if the air is considered toxic.
+     *
+     * @return true if toxic, false otherwise
+     */
+    public boolean isToxic() {
+        return super.getToxicity() > TOXICITY * TOXICITY_DENOMINATOR;
     }
 }
