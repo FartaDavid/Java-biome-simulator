@@ -29,11 +29,19 @@ public class Polar extends Air {
      *
      * @return computed air quality value
      */
+    @Override
     public double calculateAirQuality() {
         return super.getOxygenLevel() * 2
                 + BASE_QUALITY_BONUS
                 - Math.abs(super.getTemperature())
                 - iceCrystalConcentration * ICE_CRYSTAL_FACTOR;
+    }
+
+    @Override
+    public double calculateToxicity() {
+        double toxicityAQ = TOXICITY_BASE
+                * (1.0 - getAirQuality() / TOXICITY_DENOMINATOR);
+        return toxicityAQ;
     }
 
     /**
@@ -61,10 +69,7 @@ public class Polar extends Air {
 
         normalizeQuality(calculateAirQuality());
 
-        double toxicityAQ =
-                TOXICITY_BASE * (1.0 - calculateAirQuality() / TOXICITY_DENOMINATOR);
-
-        getToxicity(toxicityAQ);
+        getToxicity(calculateToxicity());
     }
 
     /**

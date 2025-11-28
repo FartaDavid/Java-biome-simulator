@@ -36,6 +36,13 @@ public final class Montan extends Air {
                 + super.getHumidity() * HUMIDITY_FACTOR;
     }
 
+    @Override
+    public double calculateToxicity() {
+        double toxicityAQ = MAX_PERCENTAGE
+                * (1.0 - getAirQuality() / TOXICITY_DENOMINATOR);
+        return toxicityAQ;
+    }
+
     /**
      * Constructs a new Montan air entity.
      * Initializes the air properties and calculates initial toxicity.
@@ -56,9 +63,7 @@ public final class Montan extends Air {
 
         normalizeQuality(calculateAirQuality());
 
-        double toxicityAQ = MAX_PERCENTAGE
-                * (1.0 - calculateAirQuality() / TOXICITY_DENOMINATOR);
-        getToxicity(toxicityAQ);
+        getToxicity(calculateToxicity());
     }
 
     /**

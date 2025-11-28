@@ -143,6 +143,7 @@ public final class ActionHandler {
         if ("plant".equals(improvement) && air != null) {
             air.setOxygenLevel(air.getOxygenLevel() + OXYGEN_INCREMENT);
             air.normalizeQuality(air.calculateAirQuality());
+            air.getToxicity(air.calculateToxicity());
 
             commandOutput.put("message", "The " + component + " was planted successfully.");
             robot.removeFromInventory(component);
@@ -158,6 +159,7 @@ public final class ActionHandler {
         if ("increase humidity".equals(improvement) && air != null) {
             air.setHumidity(air.getHumidity() + HUMIDITY_INCREMENT);
             air.normalizeQuality(air.calculateAirQuality());
+            air.getToxicity(air.calculateToxicity());
 
             commandOutput.put("message",
                     "The humidity was successfully increased using " + component);

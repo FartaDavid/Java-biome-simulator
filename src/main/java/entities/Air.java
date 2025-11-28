@@ -42,6 +42,13 @@ public abstract class Air extends Entities {
     public abstract double calculateAirQuality();
 
     /**
+     * Calculates the toxicity level based on specific implementation logic.
+     *
+     * @return the calculated toxicity as a double.
+     */
+    public abstract double calculateToxicity();
+
+    /**
      * Normalizes the air quality score to be between 0 and 100 and sets it.
      *
      * @param quality the air quality score to be normalized.

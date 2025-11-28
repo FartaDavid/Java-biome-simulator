@@ -60,6 +60,7 @@ public final class SimulationManager {
                         air.setOxygenLevel(o2Round);
 
                         air.normalizeQuality(air.calculateAirQuality());
+                        air.getToxicity(air.calculateToxicity());
                     }
                 }
 
@@ -76,6 +77,7 @@ public final class SimulationManager {
                         soil.calculateQuality();
 
                         air.normalizeQuality(air.calculateAirQuality());
+                        air.getToxicity(air.calculateToxicity());
 
                         water.setTime(GameMap.TIMER_RESET_VALUE);
                     } else {
@@ -119,7 +121,6 @@ public final class SimulationManager {
                     if (animal.getTimer() == 0) {
                         // Pass 'map' instead of 'this' because 'this' is now SimulationManager
                         Cell bestCell = animal.move(map, i, j, predator);
-
                         if (predator) {
                             animal.setTimer(GameMap.TIMER_RESET_VALUE);
                             if (bestCell.getAnimal() != null && bestCell != currentCell) {

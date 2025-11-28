@@ -47,7 +47,7 @@ public final class Robot {
         int n = map.getX();
         int m = map.getY();
 
-        // pun fiecare celula intr-un vector
+        // putting neighbors in an array
         if (y + 1 < m) {
             cells[0] = map.getCell(x, y + 1);
         }
@@ -64,7 +64,7 @@ public final class Robot {
         Cell bestCell = null;
         double maxQlt = Double.MAX_VALUE;
 
-        // parcurg vectorul pentru a afla cea mai buna celula
+        // moving to the best cell
         for (int i = 0; i < NEIGHBORS; i++) {
             if (cells[i] == null) {
                 continue;
@@ -78,7 +78,7 @@ public final class Robot {
             Animal animal = cells[i].getAnimal();
             Plant plant = cells[i].getPlant();
 
-            // verific pericolele
+            // verify which objects are present
             if (air != null) {
                 sum += air.getToxicity();
                 count++;

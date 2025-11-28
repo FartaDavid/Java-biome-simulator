@@ -33,6 +33,13 @@ public final class Temperat extends Air {
                 - pollenLevel * POLLEN_COEFFICIENT;
     }
 
+    @Override
+    public double calculateToxicity() {
+        double toxicityAQ = MAX_PERCENTAGE
+                * (1.0 - getAirQuality() / TOXICITY_DENOMINATOR);
+        return toxicityAQ;
+    }
+
     /**
      * Constructs a new Temperat air entity.
      * Initializes the air properties and calculates initial toxicity.
@@ -53,9 +60,7 @@ public final class Temperat extends Air {
 
         normalizeQuality(calculateAirQuality());
 
-        double toxicityAQ = MAX_PERCENTAGE
-                * (1.0 - getAirQuality() / TOXICITY_DENOMINATOR);
-        getToxicity(toxicityAQ);
+        getToxicity(calculateToxicity());
     }
 
     /**
