@@ -14,7 +14,7 @@ import map.MapManager;
 import java.util.ArrayList;
 
 /**
- * Manager class for handling simulation commands (Refactored).
+ * Manager class for handling simulation commands.
  */
 public final class CommandManager {
     private final SimulationContext ctx;

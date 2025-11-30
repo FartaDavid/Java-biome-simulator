@@ -30,17 +30,6 @@ public final class WeatherManager {
         int x = map.getX();
         int y = map.getY();
 
-        // Reset existing weather on all cells
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                Air air = map.getCell(i, j).getAir();
-                if (air != null && air.getChangeWeather() == 0) {
-                    air.setChangeWeather(GameMap.WEATHER_RESET_TIMER);
-                    air.normalizeQuality(air.calculateAirQuality());
-                }
-            }
-        }
-
         switch (command.getType()) {
             case "rainfall":
                 for (int i = 0; i < x; i++) {
